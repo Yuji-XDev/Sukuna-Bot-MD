@@ -13,10 +13,12 @@ let acr = new acrcloud({
   access_secret: 'bvgaIAEtADBTbLwiPGYlxupWqkNGIjT7J9Ag2vIu',
 });
 
+const DEFAULT_IMAGE = 'https://files.catbox.moe/qnvpyq.jpg';
+
 function msToTime(duration) {
   let seconds = Math.floor((duration / 1000) % 60);
   let minutes = Math.floor((duration / (1000 * 60)) % 60);
-  return `${minutes}m ${seconds}s`;
+  return `${minutes}M ${seconds}S`;
 }
 
 let handler = async (m, { conn, command, usedPrefix }) => {
@@ -44,7 +46,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 
       let genres = meta.genres || [];
       let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
-      let image = meta.album?.images?.[0]?.url || null;
+      let image = meta.album?.images?.[0]?.url || DEFAULT_IMAGE;
 
       let txt = `╭─⬣「 *乂 WHATMUSIC 乂* 」⬣\n`;
       txt += `│ ≡◦ *🌳 Título ∙* ${meta.title || 'Desconocido'}\n`;
@@ -82,7 +84,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       conn.reply(m.chat, `❌ Error: ${e}`, m);
     }
   } else {
-    conn.reply(m.chat, `☃️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m, rcanal);
+    conn.reply(m.chat, `🌪️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m);
   }
 };
 
