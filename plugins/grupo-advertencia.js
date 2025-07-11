@@ -35,7 +35,8 @@ return
   }
   return !1;
 };
-
+handler.help = ['advertir'];
+handler.tags = ['grupo'];
 handler.command = ['advertir', 'advertencia', 'warn', 'warning'];
 handler.group = true;
 handler.admin = true;

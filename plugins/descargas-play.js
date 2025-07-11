@@ -1,4 +1,4 @@
-import fetch from "node-fetch"
+/*import fetch from "node-fetch"
 import yts from 'yt-search'
 import axios from "axios"
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
@@ -30,7 +30,7 @@ url = url || 'no encontrado'
 author = author || 'no encontrado'
     const vistas = formatViews(views)
     const canal = author.name ? author.name : 'Desconocido'
-    const infoMessage = `「✦」Descargando *<${title || 'Desconocido'}>*\n\n> ✧ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicado » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
+    const infoMessage = `╭─〔 🔱 *SUKUNA BOT MD* 🔮 〕─╮\n*│ ⛩️ Titulo:* ${title || 'Desconocido'}\n*│ 🥀 Canal:* ${canal}\n*│ ☄️ Vistas:* ${vistas || 'Desconocido'}\n*│ 🎈 Duracion:* ${timestamp || 'Desconocido'}\n*│ 🌐 Publicado:* ${ago || 'Desconocido'}\n*│ 🎍 Link:* ${url}\n*╰─▣ 𝑬𝒏𝒗𝒊𝒂𝒏𝒅𝒐 ▰▰▱▱*\n*╰─────────────── ⭑*`
     const thumb = (await conn.getFile(thumbnail))?.data
     const JT = {
       contextInfo: {
@@ -92,3 +92,4 @@ function formatViews(views) {
   }
   return views.toString()
 }
+*/
