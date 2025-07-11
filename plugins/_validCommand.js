@@ -109,7 +109,7 @@ export async function before(m, { conn }) {
 │ 🪷 *"${command}"* no está disponible en el sistema.
 │ 
 │ 🫧 Revisa el menú con *${usedPrefix}menu*.
-╰────────────🩵────────────╯`,
+╰────────────────────────╯`,
 
       `╭─⭑❨ 🐰 𝐄𝐫𝐫𝐨𝐫 𝐝𝐞 𝐂𝐨𝐦𝐚𝐧𝐝𝐨 ❩⭑─╮
 │ 🐚 El comando *"${command}"* no forma parte del bot.
