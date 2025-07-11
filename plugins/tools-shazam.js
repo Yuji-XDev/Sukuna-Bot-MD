@@ -13,6 +13,12 @@ let acr = new acrcloud({
   access_secret: 'bvgaIAEtADBTbLwiPGYlxupWqkNGIjT7J9Ag2vIu',
 });
 
+function msToTime(duration) {
+  let seconds = Math.floor((duration / 1000) % 60);
+  let minutes = Math.floor((duration / (1000 * 60)) % 60);
+  return `${minutes}m ${seconds}s`;
+}
+
 let handler = async (m, { conn, command, usedPrefix }) => {
   let q = m.quoted ? m.quoted : m;
   let mime = (q.msg || q).mimetype || q.mediaType || '';
@@ -21,7 +27,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
     try {
       await m.react('⏱️');
       let buffer = await q.download();
-      if (!buffer) throw '❌ ocurrio un error xd.';
+      if (!buffer) throw '❌ Ocurrió un error.';
       if (buffer.length > 1024 * 1024 * 5) throw '⚠️ El archivo es muy grande. Usa uno menor a 5MB.';
 
       let filename = `${randomUUID()}.mp3`;
@@ -37,6 +43,8 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       if (!meta) throw '❌ No se detectó ninguna canción.';
 
       let genres = meta.genres || [];
+      let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
+      let image = meta.album?.images?.[0]?.url || null;
 
       let txt = `╭─⬣「 *乂 WHATMUSIC 乂* 」⬣\n`;
       txt += `│ ≡◦ *🌳 Título ∙* ${meta.title || 'Desconocido'}\n`;
@@ -44,6 +52,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       txt += `│ ≡◦ *📚 Álbum ∙* ${meta.album?.name || 'Desconocido'}\n`;
       txt += `│ ≡◦ *🌵 Género ∙* ${genres.map(v => v.name).join(', ') || 'Desconocido'}\n`;
       txt += `│ ≡◦ *🕜 Lanzamiento ∙* ${meta.release_date || 'Desconocido'}\n`;
+      txt += `│ ≡◦ *⏱️ Duración ∙* ${duration}\n`;
       txt += `╰─⬣`;
 
       await conn.sendMessage(m.chat, {
@@ -52,7 +61,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
           externalAdReply: {
             title: meta.title || 'Canción detectada',
             body: meta.artists?.[0]?.name || '',
-            thumbnailUrl: meta?.album?.images?.[0]?.url || '',
+            thumbnailUrl: image,
             sourceUrl: meta?.external_metadata?.youtube?.url || '',
             mediaType: 1,
             renderLargerThumbnail: true,
@@ -73,7 +82,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       conn.reply(m.chat, `❌ Error: ${e}`, m);
     }
   } else {
-    conn.reply(m.chat, `☃️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m);
+    conn.reply(m.chat, `☃️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m, rcanal);
   }
 };
 
