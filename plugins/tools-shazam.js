@@ -1,6 +1,3 @@
-// codigo creado por black.OFC
-// No robes creditos 
-
 import acrcloud from 'acrcloud';
 import { writeFile, unlink } from 'fs/promises';
 import { tmpdir } from 'os';
@@ -23,21 +20,25 @@ function msToTime(duration) {
 
 let handler = async (m, { conn, command, usedPrefix }) => {
   let q = m.quoted ? m.quoted : m;
-  let mime = (q.msg || q).mimetype || q.mediaType || '';
+  let mime = q.mimetype || q.mediaType || '';
 
   if (/audio|video/.test(mime)) {
     try {
       await m.react('⏱️');
       let buffer = await q.download();
       if (!buffer) throw '❌ Ocurrió un error.';
-      if (buffer.length > 1024 * 1024 * 5) throw '⚠️ El archivo es muy grande. Usa uno menor a 5MB.';
+      if (buffer.length > 5 * 1024 * 1024) throw '⚠️ El archivo es muy grande. Usa uno menor a 5MB.';
 
       let filename = `${randomUUID()}.mp3`;
       let filepath = join(tmpdir(), filename);
       await writeFile(filepath, buffer);
 
-      let res = await acr.identify(buffer);
-      await unlink(filepath);
+      let res;
+      try {
+        res = await acr.identify(filepath);
+      } finally {
+        await unlink(filepath);
+      }
 
       if (res.status.msg !== 'Success') throw '❌ No se encontró coincidencia.';
 
@@ -46,7 +47,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 
       let genres = meta.genres || [];
       let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
-      let image = meta.album?.images?.[0]?.url || DEFAULT_IMAGE;
+      let image = meta.album?.images?.[0]?.url || meta.external_metadata?.spotify?.album?.images?.[0]?.url || DEFAULT_IMAGE;
 
       let txt = `╭─⬣「 *乂 WHATMUSIC 乂* 」⬣\n`;
       txt += `│ ≡◦ *🌳 Título ∙* ${meta.title || 'Desconocido'}\n`;
@@ -59,6 +60,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 
       await conn.sendMessage(m.chat, {
         text: txt,
+        footer: '🎶 Usa el botón para descargar',
         contextInfo: {
           externalAdReply: {
             title: meta.title || 'Canción detectada',
@@ -75,8 +77,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
             buttonText: { displayText: '📥 Descargar' },
             type: 1
           }
-        ],
-        footer: '🎶 Usa el botón para descargar',
+        ]
       }, { quoted: m });
 
     } catch (e) {
