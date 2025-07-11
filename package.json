@@ -1,6 +1,6 @@
 {
-"name": "YukiBot-MD",
-"version": "2.2.5",
+"name": "SUKUNA BOT X SHADOW•CORE",
+"version": "2.2.0",
 "description": "WhatsApp Bot Multi Device",
 "main": "index.js",
 "type": "module",
@@ -18,16 +18,16 @@
 "eslint": "eslint .",
 "eslintfix": "eslint --fix ."
 },
-"homepage": "https://github.com/The-King-Destroy/Yuki_Suou-Bot",
+"homepage": "https://github.com/Yuji-XDev/Sukuna-Bot-MD",
 "author": {
-"name": "The-King-Destroy"
+"name": "Yuji-XDev"
 },
 "repository": {
 "type": "git",
-"url": "git+https://github.com/The-King-Destroy/Yuki_Suou-Bot.git"
+"url": "git+https://github.com/Yuji-XDev/Sukuna-Bot-MD.git"
 },
 "bugs": {
-"url": "https://github.com/The-King-Destroy/Yuki_Suou-Bot/issues"
+"url": "https://github.com/Yuji-XDev/Sukuna-Bot-MD/issues"
 },
 "license": "MIT-License",
 "dependencies": {
