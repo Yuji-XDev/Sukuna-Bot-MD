@@ -13,7 +13,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   let user = global.db.data.users[m.sender]
   let name2 = conn.getName(m.sender)
   if (user.registered === true) return m.reply(`➤ ⌬ \`ＡＶＩＳＯ\` ⌬
-🚫 Ya estás registrado...
+*🚫 Ya estás registrado...*
 ¿Quieres reiniciar tu progreso?
   
 ⛩️ Usa *#unreg* para borrar tu registro y volver a empezar.`)
@@ -46,7 +46,7 @@ regbot += `┊☆ 🌪️ \`Edad:\` *${age} años*\n`
 regbot += `┊\n`
 regbot += `┊ 🎁 ＲＥＣＯＭＰＥＮＳＡＳ:\n`
 regbot += `┊☆ 💥 \`Coins:\` +40\n`
-regbot += `┊☆ ✨ \`Exp:\` +300n`
+regbot += `┊☆ ✨ \`Exp:\` +300\n`
 regbot += `┊☆ 🪙 \`Tokens:\` +20\n`
 regbot += `╰──────────────────────╯\n`
 regbot += `> ⛩️ ${dev}`
