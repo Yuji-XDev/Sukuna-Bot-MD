@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+/*import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args, text, command }) => {
   if (!text) {
@@ -45,3 +45,80 @@ handler.command = handler.help = ['ytv'];
 handler.tags = ['downloader'];
 
 export default handler;
+*/
+
+
+import fetch from 'node-fetch';
+
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  if (!args[0]) return m.reply(`*⛩️ Ingresa el enlace de un video de YouTube.*`);
+
+  const url = args[0];
+
+  try {
+    const res = await fetch(`https://api.stellarwa.xyz/dow/ytmp4?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+
+    if (!data.status || !data.result) throw '*⚠️ No se pudo obtener información del video.*';
+
+    let { title, thumbnail, timestamp, views, ago, url: downloadUrl, author } = data.result;
+
+    title = title || 'No encontrado';
+    thumbnail = thumbnail || 'https://i.imgur.com/JP52fdP.png';
+    timestamp = timestamp || 'No disponible';
+    views = views || 0;
+    ago = ago || 'Desconocido';
+    downloadUrl = downloadUrl || url;
+    author = author || { name: 'Desconocido' };
+
+    const vistas = formatViews(views);
+    const canal = author.name || 'Desconocido';
+
+    const infoMessage = `
+╭─〔 🔱 *SUKUNA BOT MD* 🔮 〕─╮
+│ ⛩️ *Titulo:* ${title}
+│ 🥀 *Canal:* ${canal}
+│ ☄️ *Vistas:* ${vistas}
+│ 🎈 *Duración:* ${timestamp}
+│ 🌐 *Publicado:* ${ago}
+│ 🎍 *Link:* ${downloadUrl}
+╰─▣ *𝑬𝒏𝒗𝒊𝒂𝒏𝒅𝒐 ▰▰▱▱*
+╰─────────────── ⭑`;
+
+    const thumb = (await conn.getFile(thumbnail)).data;
+
+    const JT = {
+      contextInfo: {
+        externalAdReply: {
+          title: title,
+          body: canal,
+          mediaType: 1,
+          previewType: 0,
+          mediaUrl: downloadUrl,
+          sourceUrl: downloadUrl,
+          thumbnail: thumb,
+          renderLargerThumbnail: true,
+        },
+      },
+    };
+
+    await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption: infoMessage }, { quoted: m });
+    await conn.sendMessage(m.chat, { document: { url: downloadUrl }, fileName: `${title}.mp4`, mimetype: 'video/mp4' }, { quoted: m, ...JT });
+
+  } catch (e) {
+    console.error(e);
+    m.reply('*❌ Error al procesar el video. Asegúrate de que el enlace sea válido.*');
+  }
+};
+
+handler.command = ['ytmp4', 'video', 'ytvideo'];
+export default handler;
+
+// Formateador de vistas
+function formatViews(views) {
+  if (views === undefined || isNaN(views)) return "No disponible";
+  if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B (${views.toLocaleString()})`;
+  if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M (${views.toLocaleString()})`;
+  if (views >= 1_000) return `${(views / 1_000).toFixed(1)}k (${views.toLocaleString()})`;
+  return views.toString();
+}
