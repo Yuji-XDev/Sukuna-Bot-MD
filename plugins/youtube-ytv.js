@@ -50,37 +50,42 @@ export default handler;
 
 import fetch from 'node-fetch';
 
-let handler = async (m, { conn, args, command }) => {
+let handler = async (m, { conn, args }) => {
   if (!args[0]) return m.reply('🔴 Ingresa un enlace de YouTube.');
 
-  let url = `https://api.sylphy.xyz/descargar/ytmp4v2?url=${encodeURIComponent(args[0])}&quality=360`;
+  let urlAPI = `https://api.sylphy.xyz/descargar/ytmp4v2?url=${encodeURIComponent(args[0])}&quality=360`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(urlAPI);
     const json = await res.json();
 
-    if (!json.status || !json.res.downloadUrl) {
-      return m.reply('⚠️ No se pudo obtener el video. Intenta con otro enlace.');
+    // Verificamos si la API respondió correctamente
+    if (!json.status) {
+      return m.reply(`❌ Error de la API: ${json.message || 'Respuesta no válida.'}`);
     }
 
-    let { title, image, quality, downloadUrl } = json.res;
+    const result = json.res;
+
+    if (!result.downloadUrl || result.downloadUrl === null) {
+      return m.reply(`⚠️ La API respondió, pero no devolvió la URL de descarga.\n\n🔧 Este es el enlace de prueba: ${args[0]}\n\n👨‍💻 *API por:* ${json.creator}`);
+    }
 
     let caption = `
-🎬 *Título:* ${title}
-📥 *Calidad:* ${quality}p
-🔗 *Descarga directa:* ${downloadUrl}
+🎬 *Título:* ${result.title}
+📥 *Calidad:* ${result.quality}p
+🔗 *Descarga directa:* ${result.downloadUrl}
 👨‍💻 *API por:* ${json.creator}
 `.trim();
 
     await conn.sendMessage(m.chat, {
-      video: { url: downloadUrl },
+      video: { url: result.downloadUrl },
       caption,
-      jpegThumbnail: await (await fetch(image)).buffer()
+      jpegThumbnail: await (await fetch(result.image)).buffer()
     }, { quoted: m });
 
   } catch (e) {
-    console.error(e);
-    m.reply('❌ Error al procesar la descarga.');
+    console.error('❌ ERROR:', e);
+    m.reply('❌ Error interno. Es posible que la API haya fallado o el enlace no sea válido.');
   }
 };
 
