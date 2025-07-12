@@ -6,33 +6,33 @@ const handler = async (m, { conn, usedPrefix }) => {
   try {
     const titulo = '💠 𝐌𝐄𝐍𝐔́ 𝐋𝐈𝐒𝐓𝐀 💠';
     const texto = `
-〔👤 𝐃𝐀𝐓𝐎𝐒 𝐃𝐄𝐋 𝐔𝐒𝐔𝐀𝐑𝐈𝐎〕
-┃ 🪪 𝗡𝗼𝗺𝗯𝗿𝗲: *${conn.getName(m.sender)}*
-┃ 🧬 𝗥𝗮𝗻𝗴𝗼: *${global.db.data.users[m.sender]?.role || 'Sin rango'}*
-┃ 🧭 𝗡𝗶𝘃𝗲𝗹: *${global.db.data.users[m.sender]?.level || 0}*
-┃ 📊 𝗘𝘅𝗽: *${global.db.data.users[m.sender]?.exp || 0}*
-╰━━━━━━━━━━━━━━━━━━━━╯
+⌬〘 👤 𝐃𝐀𝐓𝐎𝐒 𝐇𝐀𝐂𝐊𝐄𝐑 〙⌬
+▣ 🧠 ID: *${conn.getName(m.sender)}*
+▣ 🧬 RANGO: *${global.db.data.users[m.sender]?.role || '┇𝙎𝙞𝙣 𝙍𝙖𝙣𝙜𝙤┇'}*
+▣ 🧭 NIVEL: *${global.db.data.users[m.sender]?.level || 0}*
+▣ ⚡ EXP: *${global.db.data.users[m.sender]?.exp || 0}*
+⌬━━━━━━━━━━━━━━━━━━━━━⌬
 
-⌬ 𝐌𝐄𝐍𝐔́ 𝐃𝐄 𝐂𝐀𝐓𝐄𝐆𝐎𝐑𝐈𝐀𝐒 ⌬
+🧿 [ 𝐀𝐂𝐂𝐄𝐒𝐎 𝐀 𝐌𝐎𝐃𝐔𝐋𝐎𝐒 ] 🧿
 
-┏━━━━━◈◈◈━━━━━┓
-┃ ⚙️ *#menugp* — Grupos
-┃ 🎨 *#menulogos* — Logos
-┃ 💖 *#dev* — Desarrollador
-┃ 🔞 *#menu18* — +18
-┃ 💿 *#menu2* — Extra
-┃ 🔎 *#menusearch* — Buscadores
-┃ 📥 *#menudl* — Descargas
-┃ 🗡️ *#menurpg* — Rol/RPG
-┗━━━━━◈◈◈━━━━━┛
-`;
+▣ 🛠️ *#menugp* → 👥 Grupos y Admin
+▣ 🎭 *#menulogos* → 🎨 Logos & Diseños
+▣ 💻 *#dev* → 👑 Panel de Owner
+▣ 🔞 *#menu18* → ⚠️ Zona +18
+▣ 🎧 *#menu2* → 📻 Extras y Audios
+▣ 🔎 *#menusearch* → 🌐 Buscadores OSINT
+▣ 📥 *#menudl* → ⬇️ Descargas de redes
+▣ 🗡️ *#menurpg* → ⚔️ Sistema RPG
+
+⌬ Sistema Operativo: *SUᴋᴜɴᴀ.ᴇxᴇ*
+⌬ Powered by: *Shadow'Core OS*`;
 
     const imagen = 'https://files.catbox.moe/35wxsf.jpg';
     const imgBuffer = await (await fetch(imagen)).buffer();
 
     const buttons = [
-      { buttonId: `${usedPrefix}reg black.18`, buttonText: { displayText: '🛡️ VERIFICAR' }, type: 1 },
-      { buttonId: `${usedPrefix}allmenu`, buttonText: { displayText: '✅ MENU COMPLETO' }, type: 1 }
+      { buttonId: `${usedPrefix}reg black.18`, buttonText: { displayText: 'USER › ACTIVAR ESCUDO' }, type: 1 },
+      { buttonId: `${usedPrefix}allmenu`, buttonText: { displayText: 'FULL PANEL – SYS' }, type: 1 }
     ];
 
     const sections = [
