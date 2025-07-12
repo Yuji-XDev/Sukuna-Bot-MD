@@ -3,7 +3,7 @@ import axios from 'axios';
 
 let handler = async (m, { conn, text, args }) => {
   try {
-    if (!text) return conn.reply(m.chat, `💔 *Por favor, ingresa la URL del vídeo de YouTube.*`, m);
+    if (!text) return conn.reply(m.chat, `💔 *Por favor, ingresa la URL del vídeo de YouTube.*`, m, rcanal);
 
     if (!/^(?:https?:\/\/)?(?:www\.|m\.|music\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/.test(args[0])) {
       return m.reply(`*⚠️ Enlace inválido, por favor coloca un enlace válido de YouTube.*`);
@@ -16,11 +16,11 @@ let handler = async (m, { conn, text, args }) => {
     let sizeStr = size ? await formatSize(size) : 'Desconocido';
 
     const title = json.title;
-    const caption = `🎬 *Aquí tienes tu video:* ${title}\n📦 Tamaño: ${sizeStr}`;
+    const caption = `🌴 ${title}\n*📦 Tamaño:* ${sizeStr}\n> ${dev}`;
     const url = args[0];
     const thumb = await getThumbnail(url);
 
-    // ✅ Enviar como documento .mp4 con externalAdReply y miniatura
+
     await conn.sendMessage(m.chat, {
       document: { url: json.url },
       fileName: `${title.replace(/[^\w\s]/gi, '').trim().replace(/\s+/g, '_')}.mp4`,
@@ -48,13 +48,12 @@ let handler = async (m, { conn, text, args }) => {
   }
 };
 
-handler.help = ['ytmp4doc'];
 handler.command = ['ytmp4doc'];
 handler.tags = ['descargas'];
+handler.command = ['ytmp4doc', 'ytvdoc', 'ytdoc'];
 
 export default handler;
 
-// 🔧 Funciones auxiliares
 
 async function ytdl(url) {
   const headers = {
