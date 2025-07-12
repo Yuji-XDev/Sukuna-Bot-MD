@@ -24,44 +24,47 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
 
 🍡 *𝙻𝙸𝙽𝙺:* ${yt_play[0].url}`;
 
-    let listSections = [{
-      title: `𔒝 𝐋𝐈𝐒𝐓 𝐃𝐄 𝐃𝐄𝐒𝐂𝐀𝐑𝐆𝐀𝐒 𔒝`,
-      highlight_label: `𝐏𝐋𝐀𝐘𝐋𝐈𝐒𝐓`,
-      rows: [
-        {
-          header: "⫶☰ 𝑷𝑳𝑨𝒀 𝑳𝑰𝑺𝑻",
-          title: "𔓕 𝙱𝚄𝚂𝚀𝚄𝙴𝙳𝙰.",
-          description: `✎ ᵇᵘˢᶜᵃʳ ᵐᵃˢ ᶜᵃⁿᶜⁱᵒⁿᵉˢ ᵈᵉˡ ᶜᵃⁿᵗᵃⁿᵗᵉ.`,
-          id: `#playlist ${text}`,
-        },
-        {
-          header: "⫹⫺ 𝐃𝐄𝐒𝐂𝐀𝐑𝐆𝐀𝐑 𝐀𝐔𝐃𝐈𝐎",
-          title: "𔓕 𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂𝒓.",
-          description: `✎ Audio en formato normal.`,
-          id: `#ytmp3 ${yt_play[0].url}`,
-        },
-        {
-          header: "⫹⫺ 𝐃𝐄𝐒𝐂𝐀𝐑𝐆𝐀𝐑 𝐕𝐈𝐃𝐄𝐎",
-          title: "𔓕 𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂𝒓.",
-          description: `✎ Video en formato normal.`,
-          id: `#ytmp4 ${yt_play[0].url}`,
-        },
-        {
-          header: "⫹⫺ 𝐀𝐔𝐃𝐈𝐎 𝐃𝐎𝐂𝐔𝐌𝐄𝐍𝐓𝐎",
-          title: "𔓕 𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂𝒓.",
-          description: `✎ Audio en formato de documento.`,
-          id: `#ytmp3doc ${yt_play[0].url}`,
-        },
-        {
-          header: "⫹⫺ 𝐕𝐈𝐃𝐄𝐎 : 𝐃𝐎𝐂𝐔𝐌𝐄𝐍𝐓𝐎",
-          title: "𔓕 𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂𝒓.",
-          description: `✎ Video en formato de documento.`,
-          id: `#ytmp4doc ${yt_play[0].url}`,
-        },
-      ]
-    }];
 
-    await conn.sendListB(m.chat, '', txt, `⁩🥞 𝙾𝙿𝙲𝙸𝙾𝙽𝙴𝚂`, yt_play[0].thumbnail, listSections, m);
+    const listMessage = {
+      text: txt,
+      footer: '🥞 OPCIONES DISPONIBLES',
+      title: null,
+      buttonText: '💫 Elegir una opción',
+      sections: [
+        {
+          title: '𔒝 LISTA DE DESCARGAS 𔒝',
+          rows: [
+            {
+              title: '🔍 Buscar más canciones',
+              description: 'Buscar más canciones similares',
+              rowId: `${usedPrefix}playlist ${text}`
+            },
+            {
+              title: '🎵 Descargar audio',
+              description: 'Descargar en formato mp3',
+              rowId: `${usedPrefix}ytmp3 ${yt_play[0].url}`
+            },
+            {
+              title: '🎬 Descargar video',
+              description: 'Descargar en formato mp4',
+              rowId: `${usedPrefix}ytmp4 ${yt_play[0].url}`
+            },
+            {
+              title: '📄 Audio como documento',
+              description: 'Recibir audio como archivo',
+              rowId: `${usedPrefix}ytmp3doc ${yt_play[0].url}`
+            },
+            {
+              title: '📄 Video como documento',
+              description: 'Recibir video como archivo',
+              rowId: `${usedPrefix}ytmp4doc ${yt_play[0].url}`
+            }
+          ]
+        }
+      ]
+    };
+
+    await conn.sendMessage(m.chat, listMessage, { quoted: m });
 
   } catch (e) {
     console.error(e);
@@ -73,22 +76,11 @@ handler.command = ['play5'];
 handler.register = true;
 export default handler;
 
-// Función para buscar en YouTube
 async function search(query, options = {}) {
   const search = await yts.search({ query, hl: 'es', gl: 'ES', ...options });
   return search.videos;
 }
 
-// Formatea números con puntos
-function MilesNumber(number) {
-  const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-  const rep = '$1.';
-  const arr = number.toString().split('.');
-  arr[0] = arr[0].replace(exp, rep);
-  return arr[1] ? arr.join('.') : arr[0];
-}
-
-// Convierte segundos a formato legible
 function secondString(seconds) {
   seconds = Number(seconds);
   const d = Math.floor(seconds / (3600 * 24));
