@@ -50,35 +50,34 @@ export default handler;
 
 import fetch from 'node-fetch';
 
-let handler = async (m, { conn, command }) => {
-  let url = 'https://api.sylphy.xyz/nsfw/tetasvid';
+let handler = async (m, { conn, args, command, text }) => {
+  if (!text) return m.reply('🔍 Ingresa una palabra clave para buscar stickers.\n\nEj: *.stickerly anime*');
 
   try {
-    const res = await fetch(url);
-    const json = await res.json();
+    let res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(text)}`);
+    let json = await res.json();
+    
+    if (!json.status || !json.res?.length) return m.reply('❌ No se encontraron resultados.');
 
-    if (!json.estado || !json.datos?.url) {
-      return m.reply('❌ No se pudo obtener el video. La API falló.');
+    let results = json.res.slice(0, 5); // Puedes aumentar o reducir la cantidad
+    let caption = `🧩 *Resultados de Sticker.ly:*\n\n`;
+
+    for (let i = 0; i < results.length; i++) {
+      let st = results[i];
+      caption += `*${i + 1}.* ${st.name}\n👤 Autor: ${st.author}\n🧷 Stickers: ${st.stickerCount}\n🔗 ${st.url}\n\n`;
     }
 
-    const videoUrl = json.datos.url;
-
     await conn.sendMessage(m.chat, {
-      document: { url: videoUrl },
-      fileName: 'nsfw-video.mp4',
-      mimetype: json.datos.mime || 'video/mp4',
-      caption: `🎥 NSFW Video - ${json.datos.tipo}`,
+      image: { url: results[0].thumbnailUrl },
+      caption,
+      jpegThumbnail: await (await fetch(results[0].thumbnailUrl)).buffer(),
     }, { quoted: m });
-
+    
   } catch (e) {
     console.error(e);
-    m.reply('⚠️ Ocurrió un error al obtener el video NSFW.');
+    m.reply('⚠️ Ocurrió un error al buscar stickers.');
   }
 };
 
-handler.command = ['tetasvid', 'nsfwvideo'];
-handler.tags = ['nsfw'];
-handler.premium = true; // Puedes cambiar esto
-handler.limit = 1;       // Si usas sistema de límites
-
+handler.command = /^stickerly$/i;
 export default handler;
