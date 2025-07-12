@@ -1,4 +1,4 @@
-/*import fetch from "node-fetch"
+import fetch from "node-fetch"
 import yts from 'yt-search'
 import axios from "axios"
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
@@ -6,21 +6,21 @@ const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-z
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     if (!text.trim()) {
-      return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
+      return conn.reply(m.chat, `*🌴 Por favor, ingresa el nombre de la música a descargar.*`, m, rcanal)
     }
   
 let videoIdToFind = text.match(youtubeRegexID) || null
-let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
+let ytplayvideo = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
 
 if (videoIdToFind) {
 const videoId = videoIdToFind[1]  
-ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
+ytplayvideo = ytplayvideo.all.find(item => item.videoId === videoId) || ytplayvideo.videos.find(item => item.videoId === videoId)
 } 
-ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2  
-if (!ytplay2 || ytplay2.length == 0) {
+ytplayvideo = ytplayvideo.all?.[0] || ytplayvideo.videos?.[0] || ytplayvideo  
+if (!ytplayvideo || ytplayvideo.length == 0) {
 return m.reply('✧ No se encontraron resultados para tu búsqueda.')
 }
-let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
+let { title, thumbnail, timestamp, views, ago, url, author } = ytplayvideo
 title = title || 'no encontrado'
 thumbnail = thumbnail || 'no encontrado'
 timestamp = timestamp || 'no encontrado'
@@ -47,7 +47,7 @@ author = author || 'no encontrado'
       },
     }
     await conn.reply(m.chat, infoMessage, m, JT)    
-    if (command === 'play' || command === 'yta' || command === 'ytmp3' || command === 'playaudio') {
+    if (command === 'playaudio' || command === 'mp3') {
       try {
         const api = await (await fetch(`https://api.stellarwa.xyz/dow/ytmp3?url=${url}`)).json()
         const resulta = api.data
@@ -57,7 +57,7 @@ author = author || 'no encontrado'
       } catch (e) {
         return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
       }
-    } else if (command === 'play2' || command === 'ytv' || command === 'ytmp4' || command === 'mp4') {
+    } else if (command === 'playvideo' || command === 'mp4') {
       try {
         const response = await fetch(`https://api.stellarwa.xyz/dow/ytmp4?url=${url}`)
         const json = await response.json()
@@ -72,7 +72,7 @@ author = author || 'no encontrado'
     return m.reply(`⚠︎ Ocurrió un error: ${error}`)
   }
 }
-handler.command = handler.help = ['play', 'yta', 'ytmp3', 'play2', 'ytv', 'ytmp4', 'playaudio', 'mp4']
+handler.command = handler.help = ['playaudio', 'mp3', 'playvideo', 'mp4']
 handler.tags = ['descargas']
 handler.group = true
 
@@ -92,4 +92,3 @@ function formatViews(views) {
   }
   return views.toString()
 }
-*/
