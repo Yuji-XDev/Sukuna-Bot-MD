@@ -22,12 +22,12 @@ let handler = async (m, { conn, usedPrefix, text, command}) => {
                 { 
                    title: "🎵 Audio",
                    description: `${v.title} | ${v.timestamp}`,
-                   id: `${usedPrefix}yta ${v.url}`
+                   id: `${usedPrefix}ytmp3 ${v.url}`
                 },
                 { 
                    title: "🎥 Video",
                    description: `${v.title} | ${v.timestamp}`, 
-                   id: `${usedPrefix}ytv ${v.url}`
+                   id: `${usedPrefix}ytmp4 ${v.url}`
                 },
                 { 
                    title: "📜 Audio (Doc)",
