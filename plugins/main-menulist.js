@@ -44,7 +44,7 @@ const handler = async (m, { conn, usedPrefix }) => {
           { title: "🔍 𝐌𝐄𝐍𝐔́ 𝐁𝐔́𝐒𝐐𝐔𝐄𝐃𝐀", description: "⟡ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐝𝐞 𝐛𝐮́𝐬𝐪𝐮𝐞𝐝𝐚...", id: `${usedPrefix}menuse` },
           { title: "👑 𝑴𝑬𝑵𝑼 𝑶𝑾𝑵𝑬𝑹", description: "𝐂𝐨𝐧𝐭𝐫𝐨𝐥 𝐝𝐞 𝐨𝐰𝐧𝐞𝐫", id: `${usedPrefix}dev` },
           { title: "🎐 𝑴𝑬𝑵𝑼 𝑨𝑼𝑫𝑰𝑶𝑺", description: "𝐌𝐞𝐧𝐮 𝐝𝐞 𝐚𝐮𝐝𝐢𝐨𝐬", id: `${usedPrefix}menu2` },
-          { title: "👤 𝑷𝑬𝑹𝑭𝑰𝑳", description: "𝐄𝐝𝐢𝐭𝐚 𝐭𝐮 𝐩𝐞𝐫𝐟𝐢𝐥", id: `${usedPrefix}perfildatesl` },
+          { title: "👤 𝑷𝑬𝑹𝑭𝑰𝑳", description: "𝐄𝐝𝐢𝐭𝐚 𝐭𝐮 𝐩𝐞𝐫𝐟𝐢𝐥", id: `${usedPrefix}perfildates` },
           { title: "👥 𝑮𝑹𝑼𝑷𝑶𝑺", description: "𝐌𝐞𝐧𝐮 𝐝𝐞 𝐠𝐫𝐮𝐩𝐨𝐬", id: `${usedPrefix}menugp` },
           { title: "🔞 𝑴𝑬𝑵𝑼 +18", description: "𝐂𝐨𝐧𝐭𝐞𝐧𝐢𝐝𝐨 𝐍𝐒𝐅𝐖", id: `${usedPrefix}menu18` },
           { title: "❤️ 𝑴𝑬𝑵𝑼 𝑳𝑶𝑮𝑶𝑺", description: "𝐌𝐞𝐧𝐮 𝐝𝐞 𝐥𝐨𝐠𝐨𝐬", id: `${usedPrefix}menulogos` },
