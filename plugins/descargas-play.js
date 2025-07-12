@@ -74,7 +74,7 @@ author = author || 'no encontrado'
 }
 handler.command = handler.help = ['playaudio', 'mp3', 'playvideo', 'mp4']
 handler.tags = ['descargas']
-handler.group = true
+//handler.group = true
 
 export default handler
 

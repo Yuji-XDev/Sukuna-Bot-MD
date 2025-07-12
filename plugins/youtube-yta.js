@@ -43,6 +43,6 @@ const handler = async (m, { conn, text, args, usedPrefix, command }) => {
 
 handler.help = ['play'].map(v => v + ' <texto|url>');
 handler.tags = ['downloader'];
-handler.command = ['play', 'playaudio'];
+handler.command = ['play'];
 
 export default handler;
