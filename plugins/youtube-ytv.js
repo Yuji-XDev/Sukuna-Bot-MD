@@ -51,46 +51,31 @@ export default handler;
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args }) => {
-  if (!args[0]) return m.reply('🔴 Ingresa un enlace de YouTube.');
+  if (!args[0]) return m.reply('❌ Ingresa el enlace de YouTube');
 
-  let urlAPI = `https://api.sylphy.xyz/descargar/ytmp4v2?url=${encodeURIComponent(args[0])}&quality=360`;
+  let api = `https://api.sylphy.xyz/download/ytmp4?url=${encodeURIComponent(args[0])}`;
 
   try {
-    const res = await fetch(urlAPI);
+    const res = await fetch(api);
     const json = await res.json();
 
-    // Verificamos si la API respondió correctamente
-    if (!json.status) {
-      return m.reply(`❌ Error de la API: ${json.message || 'Respuesta no válida.'}`);
+    if (!json.status || !json.res?.url || !json.res?.title || json.res.url.includes('undefined')) {
+      return m.reply('⚠️ No se pudo obtener el video. Puede que el enlace no sea válido o la API esté fallando.');
     }
 
-    const result = json.res;
-
-    if (!result.downloadUrl || result.downloadUrl === null) {
-      return m.reply(`⚠️ La API respondió, pero no devolvió la URL de descarga.\n\n🔧 Este es el enlace de prueba: ${args[0]}\n\n👨‍💻 *API por:* ${json.creator}`);
-    }
-
-    let caption = `
-🎬 *Título:* ${result.title}
-📥 *Calidad:* ${result.quality}p
-🔗 *Descarga directa:* ${result.downloadUrl}
-👨‍💻 *API por:* ${json.creator}
-`.trim();
+    let { url, title } = json.res;
 
     await conn.sendMessage(m.chat, {
-      video: { url: result.downloadUrl },
-      caption,
-      jpegThumbnail: await (await fetch(result.image)).buffer()
+      document: { url },
+      fileName: title + '.mp4',
+      mimetype: 'video/mp4'
     }, { quoted: m });
 
   } catch (e) {
-    console.error('❌ ERROR:', e);
-    m.reply('❌ Error interno. Es posible que la API haya fallado o el enlace no sea válido.');
+    console.error(e);
+    m.reply('❌ Error al intentar descargar el video. Intenta nuevamente.');
   }
 };
 
-handler.command = ['ytmp4sylphy'];
-handler.help = ['ytmp4sylphy <enlace>'];
-handler.tags = ['descargas'];
-
+handler.command = ['ytmp4alt2', 'video2'];
 export default handler;
