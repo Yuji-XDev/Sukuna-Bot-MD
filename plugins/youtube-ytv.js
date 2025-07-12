@@ -1,4 +1,4 @@
-/*import fetch from 'node-fetch';
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args, text, command }) => {
   if (!text) {
@@ -44,40 +44,4 @@ let handler = async (m, { conn, args, text, command }) => {
 handler.command = handler.help = ['ytv'];
 handler.tags = ['downloader'];
 
-export default handler;
-*/
-
-
-import fetch from 'node-fetch';
-
-let handler = async (m, { conn, args, command, text }) => {
-  if (!text) return m.reply('🔍 Ingresa una palabra clave para buscar stickers.\n\nEj: *.stickerly anime*');
-
-  try {
-    let res = await fetch(`https://api.sylphy.xyz/stickerly/search?q=${encodeURIComponent(text)}`);
-    let json = await res.json();
-    
-    if (!json.status || !json.res?.length) return m.reply('❌ No se encontraron resultados.');
-
-    let results = json.res.slice(0, 5); // Puedes aumentar o reducir la cantidad
-    let caption = `🧩 *Resultados de Sticker.ly:*\n\n`;
-
-    for (let i = 0; i < results.length; i++) {
-      let st = results[i];
-      caption += `*${i + 1}.* ${st.name}\n👤 Autor: ${st.author}\n🧷 Stickers: ${st.stickerCount}\n🔗 ${st.url}\n\n`;
-    }
-
-    await conn.sendMessage(m.chat, {
-      image: { url: results[0].thumbnailUrl },
-      caption,
-      jpegThumbnail: await (await fetch(results[0].thumbnailUrl)).buffer(),
-    }, { quoted: m });
-    
-  } catch (e) {
-    console.error(e);
-    m.reply('⚠️ Ocurrió un error al buscar stickers.');
-  }
-};
-
-handler.command = /^stickerly$/i;
 export default handler;
