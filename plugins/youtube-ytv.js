@@ -50,32 +50,35 @@ export default handler;
 
 import fetch from 'node-fetch';
 
-let handler = async (m, { conn, args }) => {
-  if (!args[0]) return m.reply('❌ Ingresa el enlace de YouTube');
-
-  let api = `https://api.sylphy.xyz/download/ytmp4?url=${encodeURIComponent(args[0])}`;
+let handler = async (m, { conn, command }) => {
+  let url = 'https://api.sylphy.xyz/nsfw/tetasvid';
 
   try {
-    const res = await fetch(api);
+    const res = await fetch(url);
     const json = await res.json();
 
-    if (!json.status || !json.res?.url || !json.res?.title || json.res.url.includes('undefined')) {
-      return m.reply('⚠️ No se pudo obtener el video. Puede que el enlace no sea válido o la API esté fallando.');
+    if (!json.estado || !json.datos?.url) {
+      return m.reply('❌ No se pudo obtener el video. La API falló.');
     }
 
-    let { url, title } = json.res;
+    const videoUrl = json.datos.url;
 
     await conn.sendMessage(m.chat, {
-      document: { url },
-      fileName: title + '.mp4',
-      mimetype: 'video/mp4'
+      document: { url: videoUrl },
+      fileName: 'nsfw-video.mp4',
+      mimetype: json.datos.mime || 'video/mp4',
+      caption: `🎥 NSFW Video - ${json.datos.tipo}`,
     }, { quoted: m });
 
   } catch (e) {
     console.error(e);
-    m.reply('❌ Error al intentar descargar el video. Intenta nuevamente.');
+    m.reply('⚠️ Ocurrió un error al obtener el video NSFW.');
   }
 };
 
-handler.command = ['ytmp4alt2', 'video2'];
+handler.command = ['tetasvid', 'nsfwvideo'];
+handler.tags = ['nsfw'];
+handler.premium = true; // Puedes cambiar esto
+handler.limit = 1;       // Si usas sistema de límites
+
 export default handler;
