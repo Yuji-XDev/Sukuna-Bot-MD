@@ -14,10 +14,10 @@ let staff = ` ︵ٜ⊹۬︵߭ꥈ‌⏜ׄ︵‌୨ ꥇ⭐߭ ୧‌︵۬߭⏜ꥇ�
 
 🧠 *Creador Principal*
 ╭─➤
-│ ⚽ *Nombre:* 𖣘 𝑻𝑯𝑬•𝑩𝑳𝑨𝑪𝑲
+│ ⚽ *Nombre:* ${etiqueta}𖣘
 │ 🎈 *Rol:* Developer
 │ 🔗 *Número:* wa.me/qr/5B6AGA5YNOUZI1
-│ 🧬 *GitHub:* https://github.com/the-27
+│ 🧬 *GitHub:* https://github.com/Yuji-XDev
 ╰───────────────
 
 👥 *Colaboradores*
