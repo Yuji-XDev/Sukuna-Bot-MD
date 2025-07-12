@@ -76,6 +76,8 @@ npm start
 
 > Si aparece (Y/I/N/O/D/Z) [default=N] ? use la letra "y" + "ENTER" para continuar con la instalación
 
+![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/linea.html)
+
 ### **😼 Activar en caso de detenerse en termux**
 
 > Si después de instalar el bot en Termux se detiene (pantalla en blanco, pérdida de conexión a Internet, reinicio del dispositivo), sigue estos pasos:
@@ -91,6 +93,8 @@ cd Sukuna-Bot-MD
 ```bash
 npm start
 ```
+
+![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/linea.html)
 
 #### **🔥 Obtener otro codigo qr en termux ⚡**
 
