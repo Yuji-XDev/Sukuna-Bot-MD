@@ -1,12 +1,17 @@
 let handler = async (m, { conn, usedPrefix }) => {
   const imageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
 
-  // Mensaje de carga inicial estilo hacker
-  const loadingMsg = await conn.sendMessage(m.chat, { text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...' }, { quoted: m });
+  // Enviar mensaje de carga estilo hacker
+  const loadingMsg = await conn.sendMessage(m.chat, {
+    text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...',
+  }, { quoted: m });
+
+  // Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
+  // Definir contenido final
   const caption = `
-╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗛𝗔𝗖𝗞𝗘𝗥 𝗠𝗢𝗗𝗘 ]══╗
+╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
 ║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
 ║
 ║ 🎂 ${usedPrefix}setbirth - Registrar cumpleaños
@@ -18,7 +23,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ║ 💍 ${usedPrefix}marry - Casarse (💘)
 ║ 💔 ${usedPrefix}divorce - Divorciarse (💀)
 ╚════════════════════════╝
-`;
+  `.trim();
 
   const botones = [
     {
@@ -46,15 +51,18 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
   };
 
-  // Reemplaza mensaje de carga con el contenido final
+  // Editar el mensaje anterior con la imagen y los botones
   await conn.sendMessage(m.chat, {
     image: { url: imageUrl },
-    caption: caption.trim(),
+    caption,
     footer: '⛩️ Sukuna Profile Manager',
     buttons: botones,
     viewOnce: true,
     contextInfo: contexto
-  }, { quoted: m });
+  }, {
+    quoted: m,
+    messageId: loadingMsg.key.id // opcional: para mantener relación con el anterior
+  });
 
   await m.react('💻');
 };
