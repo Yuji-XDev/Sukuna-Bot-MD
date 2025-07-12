@@ -41,6 +41,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
         buttons: [
           { buttonId: `${usedPrefix}ytmp3 ${url}`, buttonText: { displayText: '🎧 𓆩 𝗔𝗨𝗗𝗜𝗢 · 𝗠𝗣𝟯 𓆪' }, type: 1 },
           { buttonId: `${usedPrefix}ytmp4 ${url}`, buttonText: { displayText: '📽️ 𓆩 𝗩𝗜𝗗𝗘𝗢 · 𝗠𝗣𝟰 𓆪' }, type: 1 },
+          { buttonId: `${usedPrefix}ytmp3doc ${url}`, buttonText: { displayText: '🌴 𓆩 𝗔𝗨𝗗𝗜𝗢 · 𝗠𝗣𝟯 𝗗𝗢𝗖 𓆪' }, type: 1 },
         ],
         viewOnce: true,
         headerType: 4,
