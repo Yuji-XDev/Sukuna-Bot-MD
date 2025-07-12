@@ -47,7 +47,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 
       let genres = meta.genres || [];
       let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
-      let image = meta.album?.images?.[0]?.url || meta.external_metadata?.spotify?.album?.images?.[0]?.url || DEFAULT_IMAGE;
+      let image = DEFAULT_IMAGE;
 
       let txt = `╭─⬣「 *乂 WHATMUSIC 乂* 」⬣\n`;
       txt += `│ ≡◦ *🌳 Título ∙* ${meta.title || 'Desconocido'}\n`;
@@ -64,9 +64,9 @@ let handler = async (m, { conn, command, usedPrefix }) => {
         contextInfo: {
           externalAdReply: {
             title: meta.title || 'Canción detectada',
-            body: meta.artists?.[0]?.name || '',
+            body: meta.artists?.[0]?.name,
             thumbnailUrl: image,
-            sourceUrl: meta?.external_metadata?.youtube?.url || '',
+            sourceUrl: meta?.external_metadata?.youtube?.url,
             mediaType: 1,
             renderLargerThumbnail: true,
           }
