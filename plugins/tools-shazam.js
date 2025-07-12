@@ -4,7 +4,7 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { randomUUID } from 'crypto';
 
-let acr = new acrcloud({
+const acr = new acrcloud({
   host: 'identify-eu-west-1.acrcloud.com',
   access_key: 'c33c767d683f78bd17d4bd4991955d81',
   access_secret: 'bvgaIAEtADBTbLwiPGYlxupWqkNGIjT7J9Ag2vIu',
@@ -19,73 +19,84 @@ function msToTime(duration) {
 }
 
 let handler = async (m, { conn, command, usedPrefix }) => {
-  let q = m.quoted ? m.quoted : m;
-  let mime = q.mimetype || q.mediaType || '';
+  const q = m.quoted || m;
+  const mime = q.mimetype || '';
 
-  if (/audio|video/.test(mime)) {
+  if (!/audio|video/.test(mime)) {
+    return conn.reply(m.chat, `🎧 Etiqueta un *audio o video* para reconocer la música con *${usedPrefix + command}*`, m);
+  }
+
+  try {
+    await m.react('🔍');
+    const buffer = await q.download();
+
+    if (!buffer) throw 'No se pudo descargar el archivo.';
+    if (buffer.length > 5 * 1024 * 1024) throw 'El archivo es demasiado grande. Máximo permitido: 5MB.';
+
+    const tempFile = join(tmpdir(), `${randomUUID()}.mp3`);
+    await writeFile(tempFile, buffer);
+
+    let result;
     try {
-      await m.react('⏱️');
-      let buffer = await q.download();
-      if (!buffer) throw '❌ Ocurrió un error.';
-      if (buffer.length > 5 * 1024 * 1024) throw '⚠️ El archivo es muy grande. Usa uno menor a 5MB.';
-
-      let filename = `${randomUUID()}.mp3`;
-      let filepath = join(tmpdir(), filename);
-      await writeFile(filepath, buffer);
-
-      let res;
-      try {
-        res = await acr.identify(filepath);
-      } finally {
-        await unlink(filepath);
-      }
-
-      if (res.status.msg !== 'Success') throw '❌ No se encontró coincidencia.';
-
-      let meta = res.metadata?.music?.[0];
-      if (!meta) throw '❌ No se detectó ninguna canción.';
-
-      let genres = meta.genres || [];
-      let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
-      let image = DEFAULT_IMAGE;
-
-      let txt = `╭─⬣「 *乂 WHATMUSIC 乂* 」⬣\n`;
-      txt += `│ ≡◦ *🌳 Título ∙* ${meta.title || 'Desconocido'}\n`;
-      txt += `│ ≡◦ *👤 Artista ∙* ${meta.artists?.[0]?.name || 'Desconocido'}\n`;
-      txt += `│ ≡◦ *📚 Álbum ∙* ${meta.album?.name || 'Desconocido'}\n`;
-      txt += `│ ≡◦ *🌵 Género ∙* ${genres.map(v => v.name).join(', ') || 'Desconocido'}\n`;
-      txt += `│ ≡◦ *🕜 Lanzamiento ∙* ${meta.release_date || 'Desconocido'}\n`;
-      txt += `│ ≡◦ *⏱️ Duración ∙* ${duration}\n`;
-      txt += `╰─⬣`;
-
-      await conn.sendMessage(m.chat, {
-        text: txt,
-        footer: '🎶 Usa el botón para descargar',
-        contextInfo: {
-          externalAdReply: {
-            title: meta.title || 'Canción detectada',
-            body: meta.artists?.[0]?.name,
-            thumbnailUrl: image,
-            sourceUrl: meta?.external_metadata?.youtube?.url,
-            mediaType: 1,
-            renderLargerThumbnail: true,
-          }
-        },
-        buttons: [
-          {
-            buttonId: `${usedPrefix}play ${meta.title}`,
-            buttonText: { displayText: '📥 Descargar' },
-            type: 1
-          }
-        ]
-      }, { quoted: m });
-
-    } catch (e) {
-      console.error(e);
-      conn.reply(m.chat, `❌ Error: ${e}`, m);
+      result = await acr.identify(tempFile);
+    } finally {
+      await unlink(tempFile);
     }
-  } else {
-    conn.reply(m.chat, `🌪️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m);
+
+    if (!result?.status?.msg || result.status.msg !== 'Success') {
+      throw 'No se encontró coincidencia. Intenta con un audio más claro.';
+    }
+
+    const meta = result.metadata?.music?.[0];
+    if (!meta) throw 'No se detectó ninguna canción en el audio.';
+
+    const title = meta.title || 'Desconocido';
+    const artist = meta.artists?.[0]?.name || 'Desconocido';
+    const album = meta.album?.name || 'Desconocido';
+    const genres = (meta.genres || []).map(g => g.name).join(', ') || 'Desconocido';
+    const release = meta.release_date || 'Desconocido';
+    const duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
+    const thumb = meta?.album?.images?.[0]?.url || DEFAULT_IMAGE;
+    const sourceUrl =
+      meta?.external_metadata?.youtube?.url ||
+      meta?.external_metadata?.spotify?.track?.external_urls?.spotify ||
+      null;
+
+    const text = `
+╭─⬣「 *🎧 WHATMUSIC DETECTADO* 」⬣
+│ ✦ *Título:* ${title}
+│ ✦ *Artista:* ${artist}
+│ ✦ *Álbum:* ${album}
+│ ✦ *Género:* ${genres}
+│ ✦ *Lanzamiento:* ${release}
+│ ✦ *Duración:* ${duration}
+╰⬣`.trim();
+
+    await conn.sendMessage(m.chat, {
+      text,
+      footer: '🎶 Usa el botón para descargar la canción',
+      contextInfo: {
+        externalAdReply: {
+          title: title,
+          body: artist,
+          thumbnailUrl: thumb,
+          sourceUrl: sourceUrl || undefined,
+          mediaType: 1,
+          renderLargerThumbnail: true,
+        },
+      },
+      buttons: [
+        {
+          buttonId: `${usedPrefix}play ${title}`,
+          buttonText: { displayText: '📥 Descargar' },
+          type: 1,
+        },
+      ],
+    }, { quoted: m });
+
+  } catch (err) {
+    console.error(err);
+    conn.reply(m.chat, `❌ *Error:* ${err}`, m);
   }
 };
 
