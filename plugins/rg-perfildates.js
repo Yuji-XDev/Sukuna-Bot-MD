@@ -1,7 +1,7 @@
 let handler = async (m, { conn, usedPrefix }) => {
   const imageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
 
-  // Enviar mensaje de carga estilo hacker
+  // Mensaje de carga inicial estilo hacker
   const loadingMsg = await conn.sendMessage(m.chat, {
     text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...',
   }, { quoted: m });
@@ -9,7 +9,6 @@ let handler = async (m, { conn, usedPrefix }) => {
   // Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Definir contenido final
   const caption = `
 ╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
 ║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
@@ -29,13 +28,13 @@ let handler = async (m, { conn, usedPrefix }) => {
     {
       type: 1,
       buttonId: `${usedPrefix}profile`,
-      buttonText: { displayText: '⚙️ Ver Perfil' }
+      buttonText: { displayText: '⚙️ Ver Perfil' },
     },
     {
       type: 1,
       buttonId: `${usedPrefix}menu`,
-      buttonText: { displayText: '🌐 Menú Principal' }
-    }
+      buttonText: { displayText: '🌐 Menú Principal' },
+    },
   ];
 
   const contexto = {
@@ -47,22 +46,22 @@ let handler = async (m, { conn, usedPrefix }) => {
       thumbnailUrl: imageUrl,
       mediaType: 1,
       renderLargerThumbnail: true,
-      sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot'
-    }
+      sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot',
+    },
   };
 
-  // Editar el mensaje anterior con la imagen y los botones
+  // Eliminar mensaje de carga
+  await conn.sendMessage(m.chat, { delete: loadingMsg.key });
+
+  // Enviar mensaje final con imagen, botones y contexto
   await conn.sendMessage(m.chat, {
     image: { url: imageUrl },
     caption,
     footer: '⛩️ Sukuna Profile Manager',
     buttons: botones,
     viewOnce: true,
-    contextInfo: contexto
-  }, {
-    quoted: m,
-    messageId: loadingMsg.key.id // opcional: para mantener relación con el anterior
-  });
+    contextInfo: contexto,
+  }, { quoted: m });
 
   await m.react('💻');
 };
