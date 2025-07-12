@@ -76,7 +76,7 @@ npm start
 
 > Si aparece (Y/I/N/O/D/Z) [default=N] ? use la letra "y" + "ENTER" para continuar con la instalación
 
-![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/linea.html)
+![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/index.html)
 
 ### **😼 Activar en caso de detenerse en termux**
 
@@ -94,7 +94,7 @@ cd Sukuna-Bot-MD
 npm start
 ```
 
-![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/linea.html)
+![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/index.html)
 
 #### **🔥 Obtener otro codigo qr en termux ⚡**
 
