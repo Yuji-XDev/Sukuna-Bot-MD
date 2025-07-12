@@ -1,16 +1,16 @@
 let handler = async (m, { conn, usedPrefix }) => {
-  const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg'; // Logo miniatura (thumbnail)
-  const mainImageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg'; // Imagen principal grande
+  const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg';
+  const mainImageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
 
-  // Mensaje estilo hacker (no se elimina)
+  // 1. Enviar mensaje estilo hacker (carga)
   await conn.sendMessage(m.chat, {
     text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░',
   }, { quoted: m });
 
-  // Esperar 1 segundo
+  // 2. Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Texto principal del perfil
+  // 3. Preparar contenido principal
   const caption = `
 ╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
 ║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
@@ -25,41 +25,43 @@ let handler = async (m, { conn, usedPrefix }) => {
 ║ 💔 ${usedPrefix}divorce - Divorciarse (💀)
 ╚════════════════════════╝`.trim();
 
-  const botones = [
+  const buttons = [
     {
-      type: 1,
       buttonId: `${usedPrefix}profile`,
       buttonText: { displayText: '⚙️ Ver Perfil' },
+      type: 1
     },
     {
-      type: 1,
       buttonId: `${usedPrefix}menu`,
       buttonText: { displayText: '🌐 Menú Principal' },
-    },
+      type: 1
+    }
   ];
 
-  const contexto = {
+  const contextInfo = {
     forwardingScore: 999,
     isForwarded: true,
     externalAdReply: {
       title: '⚠️ CONFIGURACIÓN AVANZADA',
       body: '🌌 Personaliza tu avatar digital en Sukuna Bot',
-      thumbnailUrl: logoUrl, // Miniatura del logo
+      thumbnailUrl: logoUrl,
       mediaType: 1,
       renderLargerThumbnail: true,
       sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot',
     },
   };
 
-  // Enviar mensaje final con imagen principal, botones y mini logo
+  // 4. Enviar mensaje con imagen, texto y botones
   await conn.sendMessage(m.chat, {
     image: { url: mainImageUrl },
     caption,
     footer: '⛩️ Sukuna Profile Manager',
-    buttons: botones,
-    contextInfo: contexto,
+    buttons,
+    headerType: 4,
+    contextInfo
   }, { quoted: m });
 
+  // 5. Reacción opcional
   await m.react('💻');
 };
 
