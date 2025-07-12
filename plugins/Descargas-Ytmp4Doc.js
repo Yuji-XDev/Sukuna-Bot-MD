@@ -16,7 +16,7 @@ let handler = async (m, { conn, text, args }) => {
     let sizeStr = size ? await formatSize(size) : 'Desconocido';
 
     const title = json.title;
-    const caption = `🌴 ${title}\n*📦 Tamaño:* ${sizeStr}\n> ${dev}`;
+    const caption = `🌴 *${title}*\n*📦 Tamaño:* ${sizeStr}\n> ${dev}`;
     const url = args[0];
     const thumb = await getThumbnail(url);
 

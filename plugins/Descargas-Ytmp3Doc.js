@@ -57,7 +57,6 @@ const handler = async (m, { conn, text, command }) => {
       return conn.reply(m.chat, `👻 Ingresa el nombre del video a descargar.`, m);
     }
 
-
     await conn.sendMessage(m.chat, { react: { text: '🎶', key: m.key }});
 
     const search = await yts(text);
@@ -69,14 +68,18 @@ const handler = async (m, { conn, text, command }) => {
     const { title, url, image } = videoInfo;
     const format = 'mp3';
     const downloadUrl = await ddownr.download(url, format);
+    const size = await getSize(downloadUrl);
+    const sizeStr = size ? await formatSize(size) : 'Desconocido';
 
     if (downloadUrl) {
       const fileName = `${title.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/ +/g, '_')}.${format}`;
+      const caption = `🎵 *${title}*\n📦 Tamaño: ${sizeStr}`;
 
       await conn.sendMessage(m.chat, {
         document: { url: downloadUrl },
         fileName,
         mimetype: 'audio/mpeg',
+        caption,
         contextInfo: {
           externalAdReply: {
             title: title,
@@ -90,9 +93,7 @@ const handler = async (m, { conn, text, command }) => {
         }
       }, { quoted: m });
 
-
       await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key }});
-
     } else {
       return m.reply(`⚠️ No se pudo descargar el audio.`);
     }
@@ -106,3 +107,30 @@ handler.command = handler.help = ['ytmp3doc', 'ytadoc'];
 handler.tags = ['descargas'];
 
 export default handler;
+
+// 📦 Tamaño del archivo
+async function getSize(url) {
+  try {
+    const response = await axios.head(url);
+    const length = response.headers['content-length'];
+    return length ? parseInt(length, 10) : null;
+  } catch (error) {
+    console.error("Error al obtener el tamaño:", error.message);
+    return null;
+  }
+}
+
+// 📦 Conversión de bytes a formato legible
+async function formatSize(bytes) {
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let i = 0;
+
+  if (!bytes || isNaN(bytes)) return 'Desconocido';
+
+  while (bytes >= 1024 && i < units.length - 1) {
+    bytes /= 1024;
+    i++;
+  }
+
+  return `${bytes.toFixed(2)} ${units[i]}`;
+}
