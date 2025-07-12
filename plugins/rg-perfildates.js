@@ -10,11 +10,10 @@ let handler = async (m, { conn, usedPrefix }) => {
   // Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Enviar logo pequeño como primer imagen
+  // Enviar logo pequeño como primer imagen (ya NO es viewOnce)
   await conn.sendMessage(m.chat, {
     image: { url: logoUrl },
     caption: '🔧 Iniciando módulo de perfil...\n⏳ Espera un momento...',
-    viewOnce: true
   }, { quoted: m });
 
   // Texto principal
@@ -58,7 +57,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     },
   };
 
-  // Enviar imagen principal con botones y contexto
+  // Enviar imagen principal con botones y contexto (ya no es viewOnce)
   await conn.sendMessage(m.chat, {
     image: { url: mainImageUrl },
     caption,
