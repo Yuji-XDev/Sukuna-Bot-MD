@@ -2,15 +2,15 @@ let handler = async (m, { conn, usedPrefix }) => {
   const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg';
   const mainImageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
 
-  // 1. Enviar mensaje estilo hacker (carga)
+  // 🧠 Mensaje de carga estilo hacker
   await conn.sendMessage(m.chat, {
     text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░',
   }, { quoted: m });
 
-  // 2. Esperar 1 segundo
+  // ⏱ Espera de 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // 3. Preparar contenido principal
+  // 📄 Texto del perfil
   const caption = `
 ╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
 ║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
@@ -25,33 +25,25 @@ let handler = async (m, { conn, usedPrefix }) => {
 ║ 💔 ${usedPrefix}divorce - Divorciarse (💀)
 ╚════════════════════════╝`.trim();
 
+  // ✅ Botones tipo botón rápido (type: 1)
   const buttons = [
-    {
-      buttonId: `${usedPrefix}profile`,
-      buttonText: { displayText: '⚙️ Ver Perfil' },
-      type: 1
-    },
-    {
-      buttonId: `${usedPrefix}menu`,
-      buttonText: { displayText: '🌐 Menú Principal' },
-      type: 1
-    }
+    { buttonId: `${usedPrefix}profile`, buttonText: { displayText: '⚙️ Ver Perfil' }, type: 1 },
+    { buttonId: `${usedPrefix}menu`, buttonText: { displayText: '🌐 Menú Principal' }, type: 1 },
   ];
 
+  // 🌐 Contexto externo con logo y link
   const contextInfo = {
-    forwardingScore: 999,
-    isForwarded: true,
     externalAdReply: {
       title: '⚠️ CONFIGURACIÓN AVANZADA',
       body: '🌌 Personaliza tu avatar digital en Sukuna Bot',
-      thumbnailUrl: logoUrl,
+      thumbnail: await (await fetch(logoUrl)).buffer(),
       mediaType: 1,
       renderLargerThumbnail: true,
       sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot',
     },
   };
 
-  // 4. Enviar mensaje con imagen, texto y botones
+  // 📤 Enviar mensaje final con imagen, botones y pie de página
   await conn.sendMessage(m.chat, {
     image: { url: mainImageUrl },
     caption,
@@ -61,7 +53,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     contextInfo
   }, { quoted: m });
 
-  // 5. Reacción opcional
+  // ✅ Reacción final
   await m.react('💻');
 };
 
