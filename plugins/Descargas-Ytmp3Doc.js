@@ -73,7 +73,7 @@ const handler = async (m, { conn, text, command }) => {
 
     if (downloadUrl) {
       const fileName = `${title.replace(/[^a-zA-Z0-9 ]/g, '').trim().replace(/ +/g, '_')}.${format}`;
-      const caption = `🎵 *${title}*\n📦 Tamaño: ${sizeStr}`;
+      const caption = `😁 *${title}*\n*📦 Tamaño:* ${sizeStr}\n> ${dev}`;
 
       await conn.sendMessage(m.chat, {
         document: { url: downloadUrl },
@@ -83,7 +83,7 @@ const handler = async (m, { conn, text, command }) => {
         contextInfo: {
           externalAdReply: {
             title: title,
-            body: `YOUTUBE • MP3 DOC`,
+            body: `🏞️⋋̳͡⊱𝗬𝗢𝗨𝗧𝗨𝗕𝗘𐚁๋࣭⭑ֶָ֢𝗠𝗣3 𝗗𝗢𝗖⊰͡⋌̳🎄`,
             mediaUrl: url,
             sourceUrl: url,
             thumbnailUrl: image,
@@ -108,7 +108,7 @@ handler.tags = ['descargas'];
 
 export default handler;
 
-// 📦 Tamaño del archivo
+
 async function getSize(url) {
   try {
     const response = await axios.head(url);
@@ -120,7 +120,7 @@ async function getSize(url) {
   }
 }
 
-// 📦 Conversión de bytes a formato legible
+
 async function formatSize(bytes) {
   const units = ['B', 'KB', 'MB', 'GB'];
   let i = 0;
