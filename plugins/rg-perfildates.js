@@ -10,13 +10,12 @@ let handler = async (m, { conn, usedPrefix }) => {
   // Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Enviar logo pequeño como primer imagen (ya NO es viewOnce)
+  // Enviar logo como imagen pequeña sin texto
   await conn.sendMessage(m.chat, {
     image: { url: logoUrl },
-    caption: '🔧 Iniciando módulo de perfil...\n⏳ Espera un momento...',
   }, { quoted: m });
 
-  // Texto principal
+  // Texto principal del perfil
   const caption = `
 ╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
 ║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
@@ -57,7 +56,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     },
   };
 
-  // Enviar imagen principal con botones y contexto (ya no es viewOnce)
+  // Enviar imagen principal con caption, botones y contexto
   await conn.sendMessage(m.chat, {
     image: { url: mainImageUrl },
     caption,
