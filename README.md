@@ -5,7 +5,9 @@
 
 <p align="center">
   <a href="https://wa.me/51969214380">
-    <img title="Autor" src="https://img.shields.io/badge/sʜᴀᴅᴏᴡ:ᴄᴏʀᴇ sʜᴀᴅᴏᴡ'ᴄᴏʀᴇ?style=for-the-badge&logo=whatsapp">
+    <img 
+      title="Autor" 
+      src="https://img.shields.io/badge/sʜᴀᴅᴏᴡ_ᴄᴏʀᴇ-sʜᴀᴅᴏᴡ_ᴄᴏʀᴇ-green?style=for-the-badge&logo=whatsapp">
   </a>
 </p>
 

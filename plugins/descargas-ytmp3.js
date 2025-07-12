@@ -15,7 +15,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const json = await res.json();
 
     if (!json.status || !json.result || !json.result.downloadUrl) {
-      return m.reply('❌ No se pudo obtener el audio. Intenta con otro título o revisa la API.');
+      return m.reply('❌ ocurrio un error intenta con otro titulo.');
     }
 
     const { title, channel, duration, cover } = json.result.metadata;
