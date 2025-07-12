@@ -64,7 +64,6 @@ let handler = async (m, { conn, usedPrefix }) => {
     caption,
     footer: '⛩️ Sukuna Profile Manager',
     buttons: botones,
-    viewOnce: true,
     contextInfo: contexto,
   }, { quoted: m });
 
