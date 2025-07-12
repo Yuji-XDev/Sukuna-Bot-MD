@@ -1,19 +1,14 @@
 let handler = async (m, { conn, usedPrefix }) => {
-  const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg'; // Logo pequeño
-  const mainImageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg'; // Imagen grande o de fondo
+  const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg'; // Logo miniatura (thumbnail)
+  const mainImageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg'; // Imagen principal grande
 
-  // Primer mensaje de carga estilo hacker (NO se elimina)
+  // Mensaje estilo hacker (no se elimina)
   await conn.sendMessage(m.chat, {
     text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░',
   }, { quoted: m });
 
   // Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // Enviar logo como imagen pequeña sin texto
-  await conn.sendMessage(m.chat, {
-    image: { url: logoUrl },
-  }, { quoted: m });
 
   // Texto principal del perfil
   const caption = `
@@ -49,14 +44,14 @@ let handler = async (m, { conn, usedPrefix }) => {
     externalAdReply: {
       title: '⚠️ CONFIGURACIÓN AVANZADA',
       body: '🌌 Personaliza tu avatar digital en Sukuna Bot',
-      thumbnailUrl: logoUrl,
+      thumbnailUrl: logoUrl, // Miniatura del logo
       mediaType: 1,
       renderLargerThumbnail: true,
       sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot',
     },
   };
 
-  // Enviar imagen principal con caption, botones y contexto
+  // Enviar mensaje final con imagen principal, botones y mini logo
   await conn.sendMessage(m.chat, {
     image: { url: mainImageUrl },
     caption,
