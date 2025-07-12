@@ -1,14 +1,23 @@
 let handler = async (m, { conn, usedPrefix }) => {
-  const imageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
+  const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg'; // Logo pequeño
+  const mainImageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg'; // Imagen grande o de fondo
 
-  // Mensaje de carga inicial estilo hacker
-  const loadingMsg = await conn.sendMessage(m.chat, {
+  // Primer mensaje de carga estilo hacker (NO se elimina)
+  await conn.sendMessage(m.chat, {
     text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░',
   }, { quoted: m });
 
   // Esperar 1 segundo
   await new Promise(resolve => setTimeout(resolve, 1000));
 
+  // Enviar logo pequeño como primer imagen
+  await conn.sendMessage(m.chat, {
+    image: { url: logoUrl },
+    caption: '🔧 Iniciando módulo de perfil...\n⏳ Espera un momento...',
+    viewOnce: true
+  }, { quoted: m });
+
+  // Texto principal
   const caption = `
 ╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
 ║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
@@ -21,8 +30,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ║ 🚫 ${usedPrefix}delgenre - Quitar género
 ║ 💍 ${usedPrefix}marry - Casarse (💘)
 ║ 💔 ${usedPrefix}divorce - Divorciarse (💀)
-╚════════════════════════╝
-  `.trim();
+╚════════════════════════╝`.trim();
 
   const botones = [
     {
@@ -43,19 +51,16 @@ let handler = async (m, { conn, usedPrefix }) => {
     externalAdReply: {
       title: '⚠️ CONFIGURACIÓN AVANZADA',
       body: '🌌 Personaliza tu avatar digital en Sukuna Bot',
-      thumbnailUrl: imageUrl,
+      thumbnailUrl: logoUrl,
       mediaType: 1,
       renderLargerThumbnail: true,
       sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot',
     },
   };
 
-  // Eliminar mensaje de carga
-  await conn.sendMessage(m.chat, { delete: loadingMsg.key });
-
-  // Enviar mensaje final con imagen, botones y contexto
+  // Enviar imagen principal con botones y contexto
   await conn.sendMessage(m.chat, {
-    image: { url: imageUrl },
+    image: { url: mainImageUrl },
     caption,
     footer: '⛩️ Sukuna Profile Manager',
     buttons: botones,
