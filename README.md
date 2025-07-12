@@ -76,8 +76,11 @@ npm start
 
 > Si aparece (Y/I/N/O/D/Z) [default=N] ? use la letra "y" + "ENTER" para continuar con la instalación
 
-![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/index.html)
+![line](Yuji-XDev/Shadow-core/blob/main/index.html)
 
+![line](https://github.com/AnderMendoza/AnderMendoza/raw/main/assets/line-neon.gif)
+
+![line](https://github.com/Yuji-XDev/Shadow-core/blob/main/index.html)
 ### **😼 Activar en caso de detenerse en termux**
 
 > Si después de instalar el bot en Termux se detiene (pantalla en blanco, pérdida de conexión a Internet, reinicio del dispositivo), sigue estos pasos:
