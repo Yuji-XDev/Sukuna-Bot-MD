@@ -75,7 +75,7 @@ npm start
 ```
 
 > Si aparece (Y/I/N/O/D/Z) [default=N] ? use la letra "y" + "ENTER" para continuar con la instalación
-
+![line](https://github.com/Yuji-XDev/Yuji-XDev/blob/main/shadow'core/line.gif)
 ### **😼 Activar en caso de detenerse en termux**
 
 > Si después de instalar el bot en Termux se detiene (pantalla en blanco, pérdida de conexión a Internet, reinicio del dispositivo), sigue estos pasos:
@@ -91,6 +91,7 @@ cd Sukuna-Bot-MD
 ```bash
 npm start
 ```
+![line](https://github.com/Yuji-XDev/Yuji-XDev/blob/main/shadow'core/line.gif)
 
 #### **🔥 Obtener otro codigo qr en termux ⚡**
 
@@ -113,7 +114,7 @@ rm -rf Sessions
 ```bash
 npm start
 ```
-    
+![line](https://github.com/Yuji-XDev/Yuji-XDev/blob/main/shadow'core/line.gif)    
 ### **🎄 Volverte owner del Bot 🎊**
 
 > Si después de instalar el bot en Termux y iniciar la session del bot (deseas poner tu número es la lista de owner pon este comando:
