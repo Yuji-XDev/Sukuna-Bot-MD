@@ -34,8 +34,6 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       let filepath = join(tmpdir(), filename);
       await writeFile(filepath, buffer);
       
-      let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
-
       let res = await acr.identify(buffer);
       await unlink(filepath);
 
@@ -44,6 +42,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       let meta = res.metadata?.music?.[0];
       if (!meta) throw '❌ No se detectó ninguna canción.';
 
+      let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
       let genres = meta.genres || [];
 
       let txt = `╭─⬣「 *🎧 WHATMUSIC DETECTADO* 」⬣
@@ -82,7 +81,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       conn.reply(m.chat, `❌ Error: ${e}`, m);
     }
   } else {
-    conn.reply(m.chat, `☃️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m);
+    conn.reply(m.chat, `🌪️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m, rcanal);
   }
 };
 
