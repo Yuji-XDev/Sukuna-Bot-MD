@@ -28,7 +28,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
       await m.react('⏱️');
       let buffer = await q.download();
       if (!buffer) throw '❌ ocurrio un error xd.';
-      if (buffer.length > 1024 * 1024 * 5) throw '⚠️ El archivo es muy grande. Usa uno menor a 5MB.';
+      if (buffer.length > 1024 * 1024 * 5) throw '*⚠️ El archivo es muy grande. Usa uno menor a 5MB.*';
 
       let filename = `${randomUUID()}.mp3`;
       let filepath = join(tmpdir(), filename);
