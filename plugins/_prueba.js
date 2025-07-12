@@ -2,26 +2,12 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   const emoji = '🎧';
-  const contextInfo = {
-    mentionedJid: [m.sender],
-    isForwarded: true,
-    forwardingScore: 999,
-    externalAdReply: {
-      title: 'Sukuna Music Downloader',
-      body: 'Tu música siempre contigo 💽',
-      thumbnail: icons,
-      sourceUrl: redes,
-      mediaType: 1,
-      renderLargerThumbnail: true
-    }
-  };
 
   if (!args[0] || !args[0].startsWith('http')) {
     return conn.reply(
       m.chat,
       `${emoji} *¡Link no válido!* Por favor, pásame un enlace válido de YouTube 📎\n\nEjemplo:\n${usedPrefix + command} https://youtu.be/KHgllosZ3kA`,
-      m,
-      { contextInfo, quoted: m }
+      m
     );
   }
 
@@ -29,8 +15,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     await conn.reply(
       m.chat,
       `⏳ *Procesando tu música...*\nPor favor espera un momento~ 🐇🎶`,
-      m,
-      { contextInfo, quoted: m }
+      m
     );
 
     const url = args[0];
@@ -42,8 +27,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       return conn.reply(
         m.chat,
         `❌ *No se pudo obtener el audio.*\nRazón: ${json.message || 'Respuesta inválida.'}`,
-        m,
-        { contextInfo, quoted: m }
+        m
       );
     }
 
@@ -71,7 +55,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         caption,
         ptt: false
       },
-      { quoted: m, contextInfo }
+      { quoted: m }
     );
 
   } catch (e) {
@@ -79,8 +63,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     return conn.reply(
       m.chat,
       `⚠️ *Error inesperado al descargar música.*\n${e.message}`,
-      m,
-      { contextInfo, quoted: m }
+      m
     );
   }
 };
