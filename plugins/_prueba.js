@@ -1,33 +1,25 @@
 import fetch from 'node-fetch';
 
-const newsletterJid  = '120363335626706839@newsletter';
-const newsletterName = '⏤͟͞ू⃪፝͜⁞⟡『 𝐓͢ᴇ𝙖፝ᴍ⃨ 𝘾𝒉꯭𝐚𝑛𝑛𝒆𝑙: 𝑹ᴜ⃜ɓ𝑦-𝑯ᴏ𝒔𝑯𝙞꯭𝑛𝒐 』࿐⟡';
-
-var handler = async (m, { conn, args, usedPrefix, command }) => {
-  const emoji = '🎵';
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  const emoji = '🎧';
   const contextInfo = {
     mentionedJid: [m.sender],
     isForwarded: true,
     forwardingScore: 999,
-    forwardedNewsletterMessageInfo: {
-      newsletterJid,
-      newsletterName,
-      serverMessageId: -1
-    },
     externalAdReply: {
-      title: wm,
-      body: dev,
+      title: 'Sukuna Music Downloader',
+      body: 'Tu música siempre contigo 💽',
       thumbnail: icons,
       sourceUrl: redes,
       mediaType: 1,
-      renderLargerThumbnail: false
+      renderLargerThumbnail: true
     }
   };
 
-  if (!args[0]) {
+  if (!args[0] || !args[0].startsWith('http')) {
     return conn.reply(
       m.chat,
-      `${emoji} *¡Oh no~!* pásame un enlace de YouTube para traer el audio.\n\nUso:\n\`${usedPrefix + command} https://youtu.be/KHgllosZ3kA\``,
+      `${emoji} *¡Link no válido!* Por favor, pásame un enlace válido de YouTube 📎\n\nEjemplo:\n${usedPrefix + command} https://youtu.be/KHgllosZ3kA`,
       m,
       { contextInfo, quoted: m }
     );
@@ -36,79 +28,64 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
   try {
     await conn.reply(
       m.chat,
-      `🌸 *Procesando tu petición...*\nUn momento, senpai~ 🎧`,
+      `⏳ *Procesando tu música...*\nPor favor espera un momento~ 🐇🎶`,
       m,
       { contextInfo, quoted: m }
     );
 
     const url = args[0];
-    const apiUrl = `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(url)}`;
-    const res     = await fetch(apiUrl);
-    const json    = await res.json();
+    const apiURL = `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(url)}`;
+    const response = await fetch(apiURL);
+    const json = await response.json();
 
     if (json.status !== 200 || !json.result?.download?.url) {
       return conn.reply(
         m.chat,
-        `❌ *No pude descargar el audio.*\nRazón: ${json.message || 'Respuesta inválida.'}`,
+        `❌ *No se pudo obtener el audio.*\nRazón: ${json.message || 'Respuesta inválida.'}`,
         m,
         { contextInfo, quoted: m }
       );
     }
 
-    // Metadata
-    const meta = json.result.metadata;
-    const title       = meta.title;
-    const description = meta.description;
-    const timestamp   = meta.timestamp;
-    const views       = meta.views.toLocaleString();
-    const ago         = meta.ago;
-    const authorName  = meta.author?.name || 'Desconocido';
-    // Download info
-    const downloadURL = json.result.download.url;
-    const quality     = json.result.download.quality;
-    const filename    = json.result.download.filename;
+    const { metadata, download } = json.result;
 
-    const audioRes    = await fetch(downloadURL);
-    const audioBuffer = await audioRes.buffer();
-
-    // Caption con separadores
     const caption = `
-╭───[ 𝚈𝚃𝙼𝙿𝟹 • 🎶 ]───⬣
-📌 *Título:* ${title}
-👤 *Autor:* ${authorName}
-⏱️ *Duración:* ${timestamp}
-📅 *Publicado:* ${ago}
-👁️ *Vistas:* ${views}
-🎚️ *Calidad:* ${quality}
-📄 *Descripción:*
-${description}
-╰────────────────⬣`;
+┌──「 𝗬𝗧𝗠𝗣𝟯 • 🎶 」─
+▢ *🎵 Título:* ${metadata.title}
+▢ *👤 Autor:* ${metadata.author?.name || 'Desconocido'}
+▢ *⏱️ Duración:* ${metadata.timestamp}
+▢ *📅 Publicado:* ${metadata.ago}
+▢ *👁️ Vistas:* ${metadata.views.toLocaleString()}
+▢ *🔊 Calidad:* ${download.quality}
+└───────────────⬣`;
 
-    // Enviar audio
+    const audioRes = await fetch(download.url);
+    const buffer = await audioRes.buffer();
+
     await conn.sendMessage(
       m.chat,
       {
-        audio: audioBuffer,
+        audio: buffer,
         mimetype: 'audio/mpeg',
-        fileName: filename,
-        ptt: false,
-        caption
+        fileName: download.filename,
+        caption,
+        ptt: false
       },
-      { contextInfo, quoted: m }
+      { quoted: m, contextInfo }
     );
 
   } catch (e) {
     console.error(e);
-    await conn.reply(
+    return conn.reply(
       m.chat,
-      `❌ *Ocurrió un error al procesar el audio.*\nDetalles: ${e.message}`,
+      `⚠️ *Error inesperado al descargar música.*\n${e.message}`,
       m,
       { contextInfo, quoted: m }
     );
   }
 };
 
-handler.help = ['ytmp3'].map(v => v + ' <link>');
+handler.help = ['ytmp3'].map(v => v + ' <url>');
 handler.tags = ['descargas'];
 handler.command = ['ytmp3', 'ytaudio', 'mp3'];
 handler.register = true;
