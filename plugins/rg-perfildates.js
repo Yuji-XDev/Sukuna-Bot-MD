@@ -3,7 +3,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
   // Mensaje de carga inicial estilo hacker
   const loadingMsg = await conn.sendMessage(m.chat, {
-    text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...',
+    text: '🧠 Procesando datos del perfil...\n⌛ Cargando configuraciones...\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░\n░▒▓█ █▓▒░',
   }, { quoted: m });
 
   // Esperar 1 segundo
