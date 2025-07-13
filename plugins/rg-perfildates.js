@@ -1,68 +1,68 @@
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix }) => {
-  // URL de la imagen principal y logo miniatura
-  const mainImage = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
-  const logoMini = 'https://files.catbox.moe/3gxuzq.jpg';
+  // Imagen principal y miniatura
+  const foto = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
+  const miniLogo = 'https://files.catbox.moe/3gxuzq.jpg';
 
-  // Texto tipo menú
-  const caption = `
-╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
-║ 🎭 𝘾𝙤𝙣𝙛𝙞𝙜𝙪𝙧𝙖 𝙩𝙪 𝙞𝙙𝙚𝙣𝙩𝙞𝙙𝙖𝙙
-║
-║ 🎂 ${usedPrefix}setbirth - Registrar cumpleaños
-║ 🗑️ ${usedPrefix}delbirth - Eliminar cumpleaños
-║ 📄 ${usedPrefix}setdesc - Cambiar biografía
-║ 🧻 ${usedPrefix}deldesc - Eliminar biografía
-║ 🚻 ${usedPrefix}setgenre - Seleccionar género
-║ 🚫 ${usedPrefix}delgenre - Quitar género
-║ 💍 ${usedPrefix}marry - Casarse
-║ 💔 ${usedPrefix}divorce - Divorciarse
-╚════════════════════════╝`.trim();
+  // Texto del menú
+  const texto = `🔧 *Panel de Configuración de Perfil*
+  
+✨ Personaliza tu identidad en el bot:
 
-  // Botones rápidos
-  const buttons = [
+🎂 ➤ ${usedPrefix}setbirth
+🗑️ ➤ ${usedPrefix}delbirth
+📄 ➤ ${usedPrefix}setdesc
+🧻 ➤ ${usedPrefix}deldesc
+🚻 ➤ ${usedPrefix}setgenre
+🚫 ➤ ${usedPrefix}delgenre
+💍 ➤ ${usedPrefix}marry
+💔 ➤ ${usedPrefix}divorce
+
+Usa los botones para comenzar.`.trim();
+
+  // Botones
+  const botones = [
     {
-      type: 1,
       buttonId: `${usedPrefix}profile`,
-      buttonText: { displayText: '⚙️ Ver Perfil' }
+      buttonText: { displayText: '📋 Mi Perfil' },
+      type: 1
     },
     {
-      type: 1,
       buttonId: `${usedPrefix}menu`,
-      buttonText: { displayText: '🌐 Menú Principal' }
+      buttonText: { displayText: '📚 Menú Principal' },
+      type: 1
     }
   ];
 
-  // Miniatura/logo con contexto externo
-  const contextInfo = {
+  // Miniatura y link del contexto
+  const contexto = {
     externalAdReply: {
-      title: '⚙️ CONFIGURACIÓN DE PERFIL',
-      body: 'Sukuna Bot MD',
+      title: '🎭 Tu Identidad Digital',
+      body: 'Sukuna Bot MD | Avanza con estilo',
+      thumbnail: await (await fetch(miniLogo)).buffer(),
       mediaType: 1,
-      thumbnail: await (await fetch(logoMini)).buffer(),
       renderLargerThumbnail: true,
       sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot'
     }
   };
 
-  // Envío del mensaje completo con imagen, caption, botones, footer y miniatura
+  // Enviar mensaje completo
   await conn.sendMessage(m.chat, {
-    image: { url: mainImage },
-    caption,
-    footer: '⛩️ Sukuna Profile Manager',
-    buttons,
+    image: { url: foto },
+    caption: texto,
+    footer: '🔒 Perfil Seguro en Sukuna Bot',
+    buttons: botones,
     headerType: 4,
-    contextInfo
+    contextInfo: contexto
   }, { quoted: m });
 
-  // Reacción opcional
-  await m.react('✅');
+  await m.react('🧠');
 };
 
-handler.command = ['perfildates', 'menuperfil'];
+handler.command = ['perfilconfig', 'ajustesperfil'];
+handler.help = ['perfilconfig'];
 handler.tags = ['perfil'];
-handler.help = ['perfildates'];
 handler.register = true;
 
 export default handler;
