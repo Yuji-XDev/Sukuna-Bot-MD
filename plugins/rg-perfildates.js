@@ -17,7 +17,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 │ 💔 ${usedPrefix}divorce - Divorciarse
 └─────────────────────┘`;
 
-  const botones = [
+  const buttons = [
     {
       type: 1,
       buttonId: `${usedPrefix}profile`,
@@ -30,11 +30,11 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
   ];
 
-  const contexto = {
+  const contextInfo = {
     forwardingScore: 1000,
     isForwarded: true,
     externalAdReply: {
-      title: '🌪️ Configuración de Perfil',
+      title: '🌪️ Configuración de Perfil 🎄',
       body: '⛩️ Administra tu identidad con Sukuna Bot ⛩️',
       thumbnail,
       mediaType: 1,
@@ -46,9 +46,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     image: { url: imageUrl },
     caption,
     footer: '🏞️ Sukuna Profile Manager',
-    buttons: botones,
-    viewOnce: true,
-    contextInfo: contexto
+    buttons,
+    contextInfo
   }, { quoted: m });
 
   await m.react('👻');
