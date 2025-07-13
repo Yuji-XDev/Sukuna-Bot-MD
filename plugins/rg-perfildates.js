@@ -1,68 +1,49 @@
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix }) => {
-  // Imagen principal y miniatura
-  const foto = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
-  const miniLogo = 'https://files.catbox.moe/3gxuzq.jpg';
+  const imageUrl = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
+  const thumbnailUrl = 'https://files.catbox.moe/3gxuzq.jpg';
 
-  // Texto del menú
-  const texto = `🔧 *Panel de Configuración de Perfil*
-  
-✨ Personaliza tu identidad en el bot:
+  const caption = `👤 *Configuración de Perfil*
 
-🎂 ➤ ${usedPrefix}setbirth
-🗑️ ➤ ${usedPrefix}delbirth
-📄 ➤ ${usedPrefix}setdesc
-🧻 ➤ ${usedPrefix}deldesc
-🚻 ➤ ${usedPrefix}setgenre
-🚫 ➤ ${usedPrefix}delgenre
-💍 ➤ ${usedPrefix}marry
-💔 ➤ ${usedPrefix}divorce
+📋 Comandos disponibles:
 
-Usa los botones para comenzar.`.trim();
+🎂 ${usedPrefix}setbirth
+📄 ${usedPrefix}setdesc
+🚻 ${usedPrefix}setgenre
+💍 ${usedPrefix}marry
+💔 ${usedPrefix}divorce`;
 
-  // Botones
-  const botones = [
-    {
-      buttonId: `${usedPrefix}profile`,
-      buttonText: { displayText: '📋 Mi Perfil' },
-      type: 1
-    },
-    {
-      buttonId: `${usedPrefix}menu`,
-      buttonText: { displayText: '📚 Menú Principal' },
-      type: 1
-    }
+  const buttons = [
+    { buttonId: `${usedPrefix}profile`, buttonText: { displayText: '👁️ Ver Perfil' }, type: 1 },
+    { buttonId: `${usedPrefix}menu`, buttonText: { displayText: '📚 Menú' }, type: 1 }
   ];
 
-  // Miniatura y link del contexto
-  const contexto = {
+  const contextInfo = {
     externalAdReply: {
-      title: '🎭 Tu Identidad Digital',
-      body: 'Sukuna Bot MD | Avanza con estilo',
-      thumbnail: await (await fetch(miniLogo)).buffer(),
+      title: '🔧 Ajustes Avanzados',
+      body: 'Sukuna Bot MD',
+      thumbnail: await fetch(thumbnailUrl).then(res => res.buffer()),
       mediaType: 1,
       renderLargerThumbnail: true,
       sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot'
     }
   };
 
-  // Enviar mensaje completo
   await conn.sendMessage(m.chat, {
-    image: { url: foto },
-    caption: texto,
-    footer: '🔒 Perfil Seguro en Sukuna Bot',
-    buttons: botones,
+    image: { url: imageUrl },
+    caption,
+    footer: '⛩️ Sukuna Profile Manager',
+    buttons,
     headerType: 4,
-    contextInfo: contexto
+    contextInfo
   }, { quoted: m });
 
-  await m.react('🧠');
+  await m.react('✅');
 };
 
-handler.command = ['perfilconfig', 'ajustesperfil'];
-handler.help = ['perfilconfig'];
+handler.command = ['perfilmenu'];
 handler.tags = ['perfil'];
-handler.register = true;
+handler.help = ['perfilmenu'];
 
 export default handler;
