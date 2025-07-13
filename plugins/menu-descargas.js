@@ -8,49 +8,52 @@ let handler = async (m, { conn }) => {
 > 📥⊹ 𝐂𝐨𝐦𝐚𝐧𝐝𝐨𝐬 𝐝𝐞 𝐝𝐞𝐬𝐜𝐚𝐫𝐠𝐚𝐬 𝐩𝐚𝐫𝐚 𝐯𝐚𝐫𝐢𝐨𝐬 𝐚𝐫𝐜𝐡𝐢𝐯𝐨𝐬 📂⊹
 
 ━⃨⃛━╼─╍╍╍─╍▻◅╍─╍╍╼╼━⃨⃛╍╍
-❥ 🎃 _.pinterestdl *<url>*_
-❥ 🎃 _.tksearch *<búsqueda>*_
-❥ 🎃 _.tkseguir_
-❥ 🎃 _.facebook - fb_
-❥ 🎃 _.gitclone *<url git>*_
-❥ 🎃 _.instagram - ig_
-❥ 🎃 _.mediafire - mf_
-❥ 🎃 _.mega_
-❥ 🎃 _.apk_
-❥ 🎃 _.npmdl_
-❥ 🎃 _.pinvid *<link>*_
-❥ 🎃 _.playlist_
-❥ 🎃 _.play_
-❥ 🎃 _.play2_
-❥ 🎃 _.spotify_
-❥ 🎃 _.tiktokrandom_
-❥ 🎃 _.snapchat_
-❥ 🎃 _.tiktok - tt_
-❥ 🎃 _.tt2_
-❥ 🎃 _.tiktokimg_ 
-❥ 🎃 _.tiktokmp3_ 
-❥ 🎃 _.audio *<url>*_
-❥ 🎃 _.video *<url>*_
-❥ 🎃 _.tiktokhd_
-❥ 🎃 _.twitter *<url>*_
-❥ 🎃 _.xnxxdl_
-❥ 🎃 _.xvideosdl_
-❥ 🎃 _.ytmp4doc_ 
-❥ 🎃 _.kwaidl_
-❥ 🎃 _.likee *<url>*_
-❥ 🎃 _.ytmp3doc_ 
-❥ 🎃 _.aplay2_
-❥ 🎃 _.capcut *<url>*_
-❥ 🎃 _.terabox_
-❥ 🎃 _.yta_
-❥ 🎃 _.iaimg *texto*_
-❥ 🎃 _.ytv_
-❥ 🎃 _.sound_
-❥ 🎃 _.play3_
-❥ 🎃 _.apk2_
-❥ 🎃 _.tiktoktrends_
-❥ 🎃 _.fdroid_
-❥ 🎃 _.fb2_
+യ ׄ🎃˚ #ᴘɪɴᴛᴇʀᴇsᴛᴅʟ *<ᴜʀʟ>*
+യ ׄ🎃˚ #ᴛᴋsᴇᴀʀᴄʜ *<ᴛxᴛ>*
+യ ׄ🎃˚ #ᴛᴋsᴇɢᴜɪʀ
+യ ׄ🎃˚ #ғᴀᴄᴇʙᴏᴏᴋ - ғʙ
+യ ׄ🎃˚ #ɢɪᴛᴄʟᴏɴᴇ *<ᴜʀʟ ɢɪᴛ>*
+യ ׄ🎃˚ #ɪɴsᴛᴀɢʀᴀᴍ
+യ ׄ🎃˚ #ᴍᴇᴅɪᴀғɪʀᴇ
+യ ׄ🎃˚ #ᴍᴇɢᴀ
+യ ׄ🎃˚ #ᴅʀɪᴠᴇ
+യ ׄ🎃˚ #ᴀᴘᴋ
+യ ׄ🎃˚ #ɴᴘᴍᴅʟ
+യ ׄ🎃˚ #ᴘɪɴᴠɪᴅ *<ʟɪɴᴋ>*
+യ ׄ🎃˚ #ᴘʟᴀʏʟɪsᴛ
+യ ׄ🎃˚ #ᴘʟᴀʏ
+യ ׄ🎃˚ #ᴘʟᴀʏ2
+യ ׄ🎃˚ #sᴘᴏᴛɪғʏ
+യ ׄ🎃˚ #ᴛɪᴋʀᴏᴋʀᴀɴᴅᴏᴍ
+യ ׄ🎃˚ #sɴᴀᴘᴄʜᴀᴛ
+യ ׄ🎃˚ #ᴛɪᴋᴛᴏᴋ - #ᴛᴛ
+യ ׄ🎃˚ #ᴛᴛ2
+യ ׄ🎃˚ #ᴛɪᴋᴛᴏᴋɪᴍɢ
+യ ׄ🎃˚ #ᴛɪᴋᴛᴏᴋᴍᴘ3 
+യ ׄ🎃˚ #ᴀᴜᴅɪᴏ *<ᴜʀʟ>*
+യ ׄ🎃˚ #ᴠɪᴅᴇᴏ *<ᴜʀʟ>*
+യ ׄ🎃˚ #ᴛɪᴋᴛᴏᴋᴅʜ
+യ ׄ🎃˚ #ᴛᴡɪᴛᴛᴇʀ *<ᴜʀʟ>*
+യ ׄ🎃˚ #ᴋᴡᴀɪᴅʟ
+യ ׄ🎃˚ #ʟɪᴋᴇᴇ *<ᴜʀʟ>*
+യ ׄ🎃˚ #ʏᴛᴍᴘ3
+യ ׄ🎃˚ #ʏᴛᴍᴘ4
+യ ׄ🎃˚ #ʏᴛᴍᴘ3ᴅᴏᴄ
+യ ׄ🎃˚ #ʏᴛᴍᴘ4ᴅᴏᴄ 
+യ ׄ🎃˚ #ᴀᴘʟᴀʏ2
+യ ׄ🎃˚ #ᴄᴀᴘᴄᴜᴛ *<ᴜʀʟ>*
+യ ׄ🎃˚ #ᴛᴇʀᴀʙᴏx
+യ ׄ🎃˚ #ɪᴀɪᴍɢ *ᴛᴇxᴛᴏ*
+യ ׄ🎃˚ #sᴏᴜɴᴅ
+യ ׄ🎃˚ #ᴀᴘᴋ2
+യ ׄ🎃˚ #ᴛɪᴋᴛᴏᴋᴛʀᴇɴᴅs
+യ ׄ🎃˚ #ғᴅᴏʀɪᴅ
+യ ׄ🎃˚ #ғʙ2
+
+❥ 𝐃𝐄𝐒𝐂𝐀𝐑𝐆𝐀𝐒 +18
+
+യ ׄ🎃˚ #xnxxdl
+യ ׄ🎃˚ #xᴠɪᴅᴇᴏsᴅʟ
 ━⃨⃛━╼─╍╍╍─╍▻◅╍─╍╍╼╼━⃨⃛╍╍
 `.trim();
 
@@ -74,7 +77,7 @@ let handler = async (m, { conn }) => {
 };
 
 handler.help = ['menudl']
-handler.tags = ['main']
+handler.tags = ['menus']
 handler.command = ['menudescargas', 'menudl']
 
 export default handler

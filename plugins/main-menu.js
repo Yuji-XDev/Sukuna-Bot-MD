@@ -82,6 +82,7 @@ let handler = async (m, { conn, args }) => {
 ╰───────────────◆
 > ⫸ .menulist
 > ⫸ .dev - *Menu owner*
+> ⫸ .menustickers
 > ⫸ .menuse - *Menu search*
 > ⫸ .menudl - *Menu descargas*
 > ⫸ .menulogos - *logos*

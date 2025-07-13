@@ -154,7 +154,7 @@ let handler = async (m, { conn, args }) => {
 };
 
 handler.help = ['menu2'];
-handler.tags = ['main'];
+handler.tags = ['menus'];
 handler.command = ['menu2', 'menuaudios'];
 
 export default handler;

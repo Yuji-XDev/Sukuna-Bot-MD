@@ -78,7 +78,7 @@ const handler = async (m, { conn, usedPrefix }) => {
 };
 
 handler.help = ['menulogos'];
-handler.tags = ['menu'];
+handler.tags = ['menus'];
 handler.command = ['menulogos', 'logosmenu', 'logostylemenu'];
 
 export default handler;

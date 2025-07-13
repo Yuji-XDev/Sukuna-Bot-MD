@@ -16,7 +16,7 @@ const defaultMenu = {
 > ғᴜɴᴄɪᴏɴᴇs ᴘᴀʀᴀ ɢʀᴜᴘᴏs.
 %readmore
 `.trimStart(),
-  header: '--------[ *%category* ]----------',
+  header: '--------[ %category ]----------',
   body: '┃ %cmd\n',
   footer: '┗━━━━━━━━━━━━━━━━\n',
   after: ``,
@@ -198,7 +198,7 @@ await m.react('⚙️')
   }
 }
 handler.help = ['menugp (Menu Para Gestionar Grupos)']
-handler.tags = ['main']
+handler.tags = ['menus']
 handler.command = ['menugp', 'menugrupo', 'menuadmin']
 
 export default handler

@@ -158,7 +158,7 @@ let handler = async (m, { conn }) => {
 };
 
 handler.help = ['dev']
-handler.tags = ['main']
+handler.tags = ['menus']
 handler.command = ['dev', 'owners']
 
 export default handler
