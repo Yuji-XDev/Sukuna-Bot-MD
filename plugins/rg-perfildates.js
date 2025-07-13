@@ -1,23 +1,21 @@
-import fetch from 'node-fetch';
-
 let handler = async (m, { conn, usedPrefix }) => {
-  const thumbUrl = 'https://files.catbox.moe/3gxuzq.jpg';
-  const thumbnail = await fetch(thumbUrl).then(res => res.buffer());
-
-  const text = `┌─〔🌌 *AJUSTES DE PERFIL* 〕─┐
-│ 〣 🧩 *Dale forma a tu identidad.*
+  const imageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
+  const caption = `┌──〔🛰️ PROFILE NODE INTERFACE〕──┐
+│ [💾] SYSTEM: BOOTING PROFILE MODULE...
 │
-│ 🎂 ${usedPrefix}setbirth - Añadir cumpleaños
-│ 🗑️ ${usedPrefix}delbirth - Borrar cumpleaños
-│ 📄 ${usedPrefix}setdesc - Editar biografía
-│ 🧻 ${usedPrefix}deldesc - Borrar biografía
-│ 🚻 ${usedPrefix}setgenre - Elegir género
-│ 🚫 ${usedPrefix}delgenre - Quitar género
-│ 💍 ${usedPrefix}marry - Casarse con alguien
-│ 💔 ${usedPrefix}divorce - Divorciarse
-└─────────────────────┘`;
+│ [🎂] .setbirth     → Set DOB
+│ [🧨] .delbirth     → Purge DOB
+│ [📄] .setdesc      → Write BIO
+│ [🔥] .deldesc      → Wipe BIO
+│ [👤] .setgenre     → Assign GENDER
+│ [💀] .delgenre     → Remove GENDER
+│ [💍] .marry        → Link PARTNER
+│ [☠️] .divorce      → Unlink PARTNER
+│
+│ 🧩 STATUS: ONLINE | AUTH: OK
+└──⟦ SΣC MODULΣ vX.1337 [ACTIVE] ⟧──┘`;
 
-  const buttons = [
+  const botones = [
     {
       type: 1,
       buttonId: `${usedPrefix}profile`,
@@ -30,27 +28,28 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
   ];
 
-  const contextInfo = {
+  const contexto = {
     forwardingScore: 1000,
     isForwarded: true,
     externalAdReply: {
       title: '🌪️ Configuración de Perfil',
       body: '⛩️ Administra tu identidad con Sukuna Bot ⛩️',
+      thumbnailUrl: imageUrl,
       mediaType: 1,
-      previewType: 'PHOTO',
-      thumbnail,
-      renderLargerThumbnail: false
+      renderLargerThumbnail: true
     }
   };
 
   await conn.sendMessage(m.chat, {
-    text,
+    image: { url: icono },
+    caption,
     footer: '🏞️ Sukuna Profile Manager',
-    buttons,
-    contextInfo
+    buttons: botones,
+    viewOnce: true,
+    contextInfo: contexto
   }, { quoted: m });
 
-  await m.react('👁️');
+  await m.react('👻');
 };
 
 handler.command = ['perfildates', 'menuperfil'];
