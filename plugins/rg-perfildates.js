@@ -1,12 +1,14 @@
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix }) => {
-  const logoUrl = 'https://files.catbox.moe/3gxuzq.jpg';
-  const mainImageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
+  // URL de la imagen principal y logo miniatura
+  const mainImage = 'https://telegra.ph/file/0c67b38e07be7ea49fa30.jpg';
+  const logoMini = 'https://files.catbox.moe/3gxuzq.jpg';
 
+  // Texto tipo menú
   const caption = `
 ╔══[ 🌐 𝗣𝗘𝗥𝗙𝗜𝗟 𝗠𝗢𝗗𝗘 ]══╗
-║ 🎭 𝙲𝚘𝚗𝚏𝚒𝚐𝚞𝚛𝚊 𝚝𝚞 𝚒𝚍𝚎𝚗𝚝𝚒𝚍𝚊𝚍 𝚍𝚒𝚐𝚒𝚝𝚊𝚕
+║ 🎭 𝘾𝙤𝙣𝙛𝙞𝙜𝙪𝙧𝙖 𝙩𝙪 𝙞𝙙𝙚𝙣𝙩𝙞𝙙𝙖𝙙
 ║
 ║ 🎂 ${usedPrefix}setbirth - Registrar cumpleaños
 ║ 🗑️ ${usedPrefix}delbirth - Eliminar cumpleaños
@@ -14,36 +16,39 @@ let handler = async (m, { conn, usedPrefix }) => {
 ║ 🧻 ${usedPrefix}deldesc - Eliminar biografía
 ║ 🚻 ${usedPrefix}setgenre - Seleccionar género
 ║ 🚫 ${usedPrefix}delgenre - Quitar género
-║ 💍 ${usedPrefix}marry - Casarse (💘)
-║ 💔 ${usedPrefix}divorce - Divorciarse (💀)
+║ 💍 ${usedPrefix}marry - Casarse
+║ 💔 ${usedPrefix}divorce - Divorciarse
 ╚════════════════════════╝`.trim();
 
+  // Botones rápidos
   const buttons = [
     {
+      type: 1,
       buttonId: `${usedPrefix}profile`,
-      buttonText: { displayText: '⚙️ Ver Perfil' },
-      type: 1
+      buttonText: { displayText: '⚙️ Ver Perfil' }
     },
     {
+      type: 1,
       buttonId: `${usedPrefix}menu`,
-      buttonText: { displayText: '🌐 Menú Principal' },
-      type: 1
+      buttonText: { displayText: '🌐 Menú Principal' }
     }
   ];
 
+  // Miniatura/logo con contexto externo
   const contextInfo = {
     externalAdReply: {
-      title: '⚠️ CONFIGURACIÓN AVANZADA',
-      body: '🌌 Personaliza tu avatar digital en Sukuna Bot',
-      thumbnail: await (await fetch(logoUrl)).buffer(),
+      title: '⚙️ CONFIGURACIÓN DE PERFIL',
+      body: 'Sukuna Bot MD',
       mediaType: 1,
+      thumbnail: await (await fetch(logoMini)).buffer(),
       renderLargerThumbnail: true,
-      sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot',
-    },
+      sourceUrl: 'https://github.com/Yuji-XDev/Sukuna-Bot'
+    }
   };
 
+  // Envío del mensaje completo con imagen, caption, botones, footer y miniatura
   await conn.sendMessage(m.chat, {
-    image: { url: mainImageUrl },
+    image: { url: mainImage },
     caption,
     footer: '⛩️ Sukuna Profile Manager',
     buttons,
@@ -51,12 +56,13 @@ let handler = async (m, { conn, usedPrefix }) => {
     contextInfo
   }, { quoted: m });
 
-  await m.react('💻');
+  // Reacción opcional
+  await m.react('✅');
 };
 
 handler.command = ['perfildates', 'menuperfil'];
-handler.tags = ['rg'];
+handler.tags = ['perfil'];
 handler.help = ['perfildates'];
-handler.coin = 3;
+handler.register = true;
 
 export default handler;
