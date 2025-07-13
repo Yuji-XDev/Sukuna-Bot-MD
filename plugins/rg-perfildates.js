@@ -1,5 +1,9 @@
+import fetch from 'node-fetch';
+
 let handler = async (m, { conn, usedPrefix }) => {
   const imageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
+  const thumbnail = await fetch(imageUrl).then(res => res.buffer());
+
   const caption = `┌─〔🌌 *AJUSTES DE PERFIL* 〕─┐
 │ 〣 🧩 *Dale forma a tu identidad.*
 │
@@ -32,7 +36,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     externalAdReply: {
       title: '🌪️ Configuración de Perfil',
       body: '⛩️ Administra tu identidad con Sukuna Bot ⛩️',
-      thumbnailUrl: imageUrl,
+      thumbnail,
       mediaType: 1,
       renderLargerThumbnail: true
     }
