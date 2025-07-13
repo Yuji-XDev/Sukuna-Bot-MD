@@ -1,10 +1,10 @@
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix }) => {
-  const imageUrl = 'https://files.catbox.moe/3gxuzq.jpg';
-  const thumbnail = await fetch(imageUrl).then(res => res.buffer());
+  const thumbUrl = 'https://files.catbox.moe/3gxuzq.jpg';
+  const thumbnail = await fetch(thumbUrl).then(res => res.buffer());
 
-  const caption = `┌─〔🌌 *AJUSTES DE PERFIL* 〕─┐
+  const text = `┌─〔🌌 *AJUSTES DE PERFIL* 〕─┐
 │ 〣 🧩 *Dale forma a tu identidad.*
 │
 │ 🎂 ${usedPrefix}setbirth - Añadir cumpleaños
@@ -34,23 +34,23 @@ let handler = async (m, { conn, usedPrefix }) => {
     forwardingScore: 1000,
     isForwarded: true,
     externalAdReply: {
-      title: '🌪️ Configuración de Perfil 🎄',
+      title: '🌪️ Configuración de Perfil',
       body: '⛩️ Administra tu identidad con Sukuna Bot ⛩️',
-      thumbnail,
       mediaType: 1,
-      renderLargerThumbnail: true
+      previewType: 'PHOTO',
+      thumbnail,
+      renderLargerThumbnail: false
     }
   };
 
   await conn.sendMessage(m.chat, {
-    image: { url: imageUrl },
-    caption,
+    text,
     footer: '🏞️ Sukuna Profile Manager',
     buttons,
     contextInfo
   }, { quoted: m });
 
-  await m.react('👻');
+  await m.react('👁️');
 };
 
 handler.command = ['perfildates', 'menuperfil'];
