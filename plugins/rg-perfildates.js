@@ -3,14 +3,14 @@ let handler = async (m, { conn, usedPrefix }) => {
   const caption = `┌──〔🛰️ PROFILE NODE INTERFACE〕──┐
 │ [💾] SYSTEM: BOOTING PROFILE MODULE...
 │
-│ [🎂] .setbirth     → Set DOB
-│ [🧨] .delbirth     → Purge DOB
-│ [📄] .setdesc      → Write BIO
-│ [🔥] .deldesc      → Wipe BIO
-│ [👤] .setgenre     → Assign GENDER
-│ [💀] .delgenre     → Remove GENDER
-│ [💍] .marry        → Link PARTNER
-│ [☠️] .divorce      → Unlink PARTNER
+│ [🎂] .setbirth    → Añadir cumpleaños
+│ [🧨] .delbirth    → Borrar cumpleaños
+│ [📄] .setdesc    → Escribir biografía
+│ [🔥] .deldesc    → Eliminar biografía
+│ [👤] .setgenre   → Definir género
+│ [💀] .delgenre   → Borrar género
+│ [💍] .marry      → Casarse con alguien
+│ [☠️] .divorce     → Divorciarse
 │
 │ 🧩 STATUS: ONLINE | AUTH: OK
 └──⟦ SΣC MODULΣ vX.1337 [ACTIVE] ⟧──┘`;
