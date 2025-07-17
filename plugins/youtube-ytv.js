@@ -56,17 +56,13 @@ const handler = async (m, { conn, text, usedPrefix, command, args }) => {
       `┃ 💾 *Tamaño:* ${sizeStr}\n` +
       `┃ 🔗 *Enlace:* ${url}\n` +
       `╰━━━━━━━━━━━━━━━━━━━━⬣\n\n` +
-      `*➤ El video se está procesando y será enviado pronto...*`;
-
-
-    await conn.sendMessage(m.chat, {
-      image: { url: thumbnail }
-    }, { quoted: m });
-
+      `> *➭ El video se está enviando, espera un momento...*`;
 
     await conn.sendMessage(m.chat, {
-      text: textoInfo
+      image: { url: thumbnail },
+      caption: textoInfo
     }, { quoted: m });
+
 
     await conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${title}.mp4`, '', m);
     m.react('✅');

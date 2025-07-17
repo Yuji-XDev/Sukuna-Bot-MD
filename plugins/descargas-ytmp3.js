@@ -21,7 +21,7 @@ const handler = async (m, { conn, text, command }) => {
     const canal = author?.name || 'Desconocido';
     const vistas = views.toLocaleString();
 
-    const textoInfo = `╭━━〔 *⛩️  YT  -  MP3 🌪️* 〕━━⬣\n`
+    const textoInfo = `╭━━〔 *⛩️  YOUTUBE - MP3 🌪️* 〕━━⬣\n`
       + `┃ ✦🌾 *Título:* ${title}\n`
       + `┃ ✦⏱️ *Duración:* ${timestamp}\n`
       + `┃ ✦🍰 *Canal:* ${canal}\n`
