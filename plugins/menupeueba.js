@@ -1,7 +1,10 @@
-let handler = async (m, { conn }) => {
-  let imgurl = 'https://files.catbox.moe/nmseef.png';
-  const texto = `ʜᴏʟᴀ
-    ╔═══════ • ° ❁⊕❁ ° • ═══════╗
+let handler = async (m, { conn, args }) => {
+  let userId = m.mentionedJid?.[0] || m.sender
+  let user = global.db.data.users[userId]
+  let name = conn.getName(userId)
+  let img = 'https://files.catbox.moe/ha863t.jpg'
+  let perfiltext = ` ${name}
+     ╔═══════ • ° ❁⊕❁ ° • ═══════╗
         💥⃢᭄͜═✩═[𝐌𝐄𝐍𝐔-𝐒𝐄𝐀𝐑𝐂𝐇]═✩═⃟⃢᭄͜🔎
     ╚═══════ • ° ❁⊕❁ ° • ═══════╝
       
@@ -35,40 +38,70 @@ let handler = async (m, { conn }) => {
 യ ׄ🌲˚ #ᴄɪɴᴇᴄᴀʟɪᴅᴀᴅsᴇᴀʀᴄʜ *<ʙᴜsǫᴜᴇᴅᴀ>*
 യ ׄ🌲˚ #ʏᴀᴏᴏsᴇᴀʀᴄʜ *<ʙᴜsǫᴜᴇᴅᴀ>*
 
-ֹི࣭࣭࣭࣭࣭࣮ׅ۪۪۪۪۪۪۪۪۪ٜ࣪࣪࣪࣪᷼✾ֹྀ࣭࣭࣭࣭࣭࣮ׅ۪۪۪۪۪۪۪۪۪ٜ࣪࣪࣪࣪᷼⏝𝐒𝐓𝐀𝐋𝐊⏝ֹི࣭࣭࣭࣭࣭࣮ׅ۪۪۪۪۪۪۪۪۪ٜ࣪࣪࣪࣪᷼✾ֹྀ࣭࣭࣭࣭࣭࣮ׅ۪۪۪۪۪۪۪۪۪ٜ࣪࣪࣪࣪᷼
+> ${dev}
+`.trim()
 
-❥ 📚 .githubstalk *<ǫᴜᴇʀʏ>*
-❥ 🔥 .minestalk *<ɴᴏᴍʙʀᴇ ᴅᴇ ᴊᴜɢᴀᴅᴏʀ>*
-❥ 🏔️ .kwaistalk *<ᴜsᴜᴀʀɪᴏ>*
-❥ 🍓 .telegramstalk *<ɴᴏᴍʙʀᴇ ᴅᴇ ᴜsᴜᴀʀɪᴏ>*
-❥ 🌿 .tiktokstalk *<ᴜsᴜᴀʀɪᴏ>*
-❥ 🍬 .youtubestalk *<ɴᴏᴍʙʀᴇ ᴅᴇ ᴜsᴜᴀʀɪᴏ>*
-❥ 🍬 .instagramstalk *<ᴜsᴜᴀʀɪᴏ>*
-━⃨⃛━╼─╍╍╍─╍▻◅╍─╍╍╼╼━⃨⃛╍╍
+  let buttons = [
+    { buttonId: '.perfil', buttonText: { displayText: '♥ perfil ♥' }, type: 1 },
+    { buttonId: '.menu', buttonText: { displayText: '♦ menu ♦' }, type: 1 }
+  ]
 
-> ${dev}`.trim();
+  let buttonMessage = {
+    text: perfiltext,
+    buttons: buttons,
+    headerType: 1,
+    contextInfo: {
+      mentionedJid: [m.sender, userId],
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: global.canalIdM,
+        newsletterName: global.botname,
+        serverMessageId: -1,
+      },
+      forwardingScore: 999,
+      externalAdReply: {
+        title: botname,
+        body: "Shadow'Core",
+        thumbnailUrl: banner,
+        sourceUrl: redes,
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: true,
+      },
+    }
+  }
+
 
   await conn.sendMessage(m.chat, {
-    image: { url: imgurl },
-    caption: texto,
+    video: { url: img, gifPlayback: true },
+    caption: perfiltext,
+    gifPlayback: true,
+    buttons: buttons,
+    headerType: 4,
     contextInfo: {
-      mentionedJid: [m.sender],
+      mentionedJid: [m.sender, userId],
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: global.canalIdM,
+        newsletterName: global.botname,
+        serverMessageId: -1,
+      },
+      forwardingScore: 999,
       externalAdReply: {
-        title: packname,
+        title: botname,
         body: dev,
-        thumbnailUrl: icono,
+        thumbnailUrl: banner,
+        sourceUrl: redes,
         mediaType: 1,
-        renderLargerThumbnail: false,
         showAdAttribution: true,
-        mediaUrl: 'https://whatsapp.com/channel/0029VbAtbPA84OmJSLiHis2U',
-        sourceUrl: 'https://whatsapp.com/channel/0029VbAtbPA84OmJSLiHis2U'
-      }
+        renderLargerThumbnail: true,
+      },
     }
-  }, { quoted: m });
-};
+  }, { quoted: m })
+}
 
-handler.help = ['menusearch']
-handler.tags = ['menus']
-handler.command = ['menusearch', 'menuse']
+handler.help = ['ayuda']
+handler.tags = ['main']
+handler.command = ['ayuda']
 
 export default handler

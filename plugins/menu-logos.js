@@ -56,7 +56,7 @@ const handler = async (m, { conn, usedPrefix }) => {
   let menutxt = `*┏━━⊱  MENÚ DE LOGOS Y ESTILOS  ⊰━━┓*\n\n`;
 
   menutxt += estilogo.map(e => `${e.emoji} *${usedPrefix}${e.cmd}*`).join('\n');
-  menutxt += `\n\n*┗━━⊱ Usa así:*\n_${usedPrefix}comando tu texto_\nPor ejemplo: *${usedPrefix}glitchtext SUKUNA BOT MD*`;
+  menutxt += `\n\n*┗━━⊱ ᴜsᴀ ᴀsɪ:*\n_${usedPrefix}ᴄᴏᴍᴀɴᴅᴏ ᴛᴇxᴛᴏ_\nPᴏʀ ᴇᴊᴇᴍᴘʟᴏ: *${usedPrefix}ɢʟɪᴛᴄʜᴛᴇxᴛ sᴜᴋᴜɴᴀ ʙᴏᴛ*`;
 
   await conn.sendMessage(m.chat, {
     text: menutxt,
