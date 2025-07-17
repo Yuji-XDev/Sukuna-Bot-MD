@@ -28,7 +28,7 @@ const handler = async (m, { conn, text, command }) => {
       + `┃ ✦🌧️ *Vistas:* ${vistas}\n`
       + `┃ ✦🌳 *Publicado:* ${ago}\n`
       + `┃ ✦🔗 *Enlace:* ${url}\n`
-      + `╰━━━━━━━━━━━━━━━━━━⬣\n> *➭ El audio se está enviando, espera un momento...*`;
+      + `╰━━━━━━━━━━━━━━━━━━⬣\n\n> *➭ El audio se está enviando, espera un momento...*`;
 
     const thumbnailBuffer = await (await fetch(thumbnail)).buffer();
 

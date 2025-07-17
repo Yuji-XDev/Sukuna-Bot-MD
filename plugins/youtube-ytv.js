@@ -1,79 +1,35 @@
 import fetch from "node-fetch";
 import axios from 'axios';
-import yts from 'yt-search';
 
-const handler = async (m, { conn, text, usedPrefix, command, args }) => {
+let handler = async (m, { conn, text, usedPrefix, command, args }) => {
   try {
     if (!text) {
-      return conn.reply(m.chat, `🎄 *Por favor, ingresa una URL válida de YouTube.*`, m);
+      return conn.reply(m.chat, `*Por favor, ingresa la URL del vídeo de YouTube.*`, m);
+    }
+
+    if (!/^(?:https?:\/\/)?(?:www\.|m\.|music\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/.test(args[0])) {
+      return m.reply(`*⚠️ Enlace inválido, por favor coloque un enlace válido de YouTube.*`);
     }
 
     m.react('🕒');
+    let json = await ytdl(args[0]);
+    let size = await getSize(json.url);
+    let sizeStr = size ? await formatSize(size) : 'Desconocido';
 
-    let videoInfo, urlYt;
+    const cap = `🌴 *${json.title}*\n\n> ${dev}`;
 
-    if (/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/.test(text)) {
-      const id = text.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([^\s&]+)/)?.[1];
-      if (!id) return m.reply(`⚠️ No se pudo extraer el ID del video.`);
+conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${json.title}.mp4`, cap, m);
 
-      const result = await yts({ videoId: id });
-      videoInfo = result;
-      urlYt = text;
-    } else {
-      const search = await yts(text);
-      if (!search || !search.videos || !search.videos.length) {
-        return conn.reply(m.chat, `⚠️ No se encontraron resultados para: *${text}*`, m);
-      }
+    //conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${json.title}.mp4`, cap, m, null, { asDocument: true, mimetype: "video/mp4" });
 
-      videoInfo = search.videos[0];
-      urlYt = videoInfo.url;
-    }
-
-    const {
-      title = 'Sin título',
-      timestamp = 'Desconocido',
-      author = {},
-      views = 0,
-      ago = 'Desconocido',
-      url = urlYt,
-      thumbnail
-    } = videoInfo;
-
-    const canal = author.name || 'Desconocido';
-    const vistas = views.toLocaleString('es-PE');
-
-    const json = await ytdl(url);
-    const size = await getSize(json.url);
-    const sizeStr = size ? await formatSize(size) : 'Desconocido';
-
-    const textoInfo =
-      `╭━━━〔 *⛩️ YOUTUBE - MP4 🌪️* 〕━━⬣\n` +
-      `┃ 📌 *Título:* ${title}\n` +
-      `┃ ⏱️ *Duración:* ${timestamp}\n` +
-      `┃ 🧑‍🏫 *Canal:* ${canal}\n` +
-      `┃ 👁️ *Vistas:* ${vistas}\n` +
-      `┃ 🗓️ *Publicado:* ${ago}\n` +
-      `┃ 💾 *Tamaño:* ${sizeStr}\n` +
-      `┃ 🔗 *Enlace:* ${url}\n` +
-      `╰━━━━━━━━━━━━━━━━━━━━⬣\n\n` +
-      `> *➭ El video se está enviando, espera un momento...*`;
-
-    await conn.sendMessage(m.chat, {
-      image: { url: thumbnail },
-      caption: textoInfo
-    }, { quoted: m });
-
-
-    await conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${title}.mp4`, '', m);
     m.react('✅');
-
   } catch (e) {
     console.error(e);
-    m.reply(`❌ Error inesperado:\n${e.message}`);
+    m.reply(`Ocurrió un error:\n${e.message}`);
   }
 };
 
-handler.help = ['ytv <link>'];
+handler.help = ['ytv'];
 handler.command = ['ytv'];
 handler.tags = ['dl'];
 
@@ -82,14 +38,16 @@ export default handler;
 async function ytdl(url) {
   const headers = {
     "accept": "*/*",
-    "accept-language": "es-PE,es;q=0.9",
+    "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
     "sec-ch-ua": "\"Not A(Brand\";v=\"8\", \"Chromium\";v=\"132\"",
     "sec-ch-ua-mobile": "?1",
     "sec-ch-ua-platform": "\"Android\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
     "Referer": "https://id.ytmp3.mobi/",
     "Referrer-Policy": "strict-origin-when-cross-origin"
   };
-
   const initial = await fetch(`https://d.ymcdn.org/api/v1/init?p=y&23=1llum1n471&_=${Math.random()}`, { headers });
   const init = await initial.json();
   const id = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*embed\/))([^&?/]+)/)?.[1];
