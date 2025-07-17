@@ -1,34 +1,22 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
-// Mapa para almacenar la sesión de búsqueda de APK
 let apkSession = new Map();
-
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  // Rama: Comando inicial .apk con término de búsqueda
+
   if (command === 'apk2' && text) {
-    /*const reactionMessage = await conn.sendMessage(
-      m.chat,
-      { text: `*🔍 Buscando la aplicación...*` },
-      { quoted: m }
-    );
-    await conn.sendMessage(
-      m.chat,
-      { react: { text: '🕑', key: reactionMessage.key } },
-      { quoted: m }
-    );*/
+    
     try {
-      // Llamada a la API con el término de búsqueda
+    
       const response = await fetch(`https://delirius-apiofc.vercel.app/download/apk?query=${encodeURIComponent(text)}`);
       const data = await response.json();
       if (!data.status || !data.data)
         throw new Error("No se encontró la aplicación.");
       
       const app = data.data;
-      // Guardamos la sesión con la info de la app
       apkSession.set(m.chat, { app });
       
-      // Descripción de la aplicación
+      
       let description = `\`\`\`◜Apk - Download◞\`\`\`\n\n`;
       description += `🌴 *\`Nombre:\`* ${app.name}\n`;
       description += `👤 *\`Desarrollador:\`* ${app.developer}\n`;
@@ -37,7 +25,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       description += `🖇️ *\`Descargas:\`* ${app.stats.downloads.toLocaleString()}\n`;
       description += `> ${dev}`;
       
-      // Botón para descarga
+
       const buttons = [
         {
           buttonId: `${usedPrefix}apk_download`,
@@ -46,7 +34,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         }
       ];
       
-      // Enviar mensaje con la imagen (icono de la app) y descripción
       await conn.sendMessage(
         m.chat,
         {
@@ -92,19 +79,19 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         document: { url: downloadUrl },
         mimetype: "application/vnd.android.package-archive",
         fileName: `${app.name}.apk`,
-        caption: `╭┈ • ┈ ୨୧ ┈ • ┈╮\n> ┆ • ${app.name}\n> ┆ • ${botname}\n> ╰┈ • ┈ ୨୧ ┈ • ┈╯`
+        caption: `🌪️ ${app.name}\n> ⋆⬪࣪ꥈ🥮★ 𝖯𑄜𝗐𝖾𝗋𝖾𝖽 𝖻𝗒 𝖲𝗁⍺𝖽ᦅ𝗐′core 𝖢𝗅𝗎𝖻𓆪`
       },
       { quoted: m }
     );
     return;
   }
-  
-  // Caso: .apk sin término de búsqueda
+
+
   if (command === 'apk2' && !text) {
     let example = `${usedPrefix}apk WhatsApp`;
     return conn.sendMessage(
       m.chat,
-      { text: `❗ Ingresa un término de búsqueda.\n\nEjemplo: ${example}` },
+      { text: `*❗ Ingresa un término de búsqueda.*\n\n\`Ejemplo:\` ${example}` },
       { quoted: m }
     );
   }
