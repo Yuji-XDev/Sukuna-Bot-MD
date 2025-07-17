@@ -9,7 +9,7 @@ await conn.sendButton(m.chat, text, `𝗦𝗛𝗔𝗗𝗢𝗪'𝗖𝗢𝗥𝗘` 
 ['ɢʀᴜᴘᴏs', '.grupos'],
 ['ᴏᴡɴᴇʀ', '#owner'],
 ['ᴍᴇɴᴜ ᴏғᴄ', '/menu']], null, [
-['ɢɪᴛʜᴜʙ', `${global.md}`]], fkontak)}
+['ɢɪᴛʜᴜʙ', `git`]], fkontak)}
 /*conn.sendMessage(m.chat, { 
 text: text, 
 contextInfo:{
@@ -32,6 +32,6 @@ body: bot,
 ['ᴄʀᴇᴀᴅᴏʀ', '#owner'],
 ['ᴍᴇɴᴜ', '/menu']
 ], m,)}*/
-handler.command = ['Hl999']
+handler.command = ['alv']
 handler.exp = 80
 export default handler
