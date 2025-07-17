@@ -25,11 +25,11 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 *${usedPrefix + command} ${name2}.18*`)
 
 
-    let hora = new Date().toLocaleTimeString('es-PE', { timeZone: 'America/Lima' });
+  let hora = new Date().toLocaleTimeString('es-PE', { timeZone: 'America/Lima' });
     
-    let fechaObj = new Date();
-    let fecha = fechaObj.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' });
-    let dia = fechaObj.toLocaleDateString('es-PE', { weekday: 'long', timeZone: 'America/Lima' });
+  let fechaObj = new Date();
+  let fecha = fechaObj.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' });
+  let dia = fechaObj.toLocaleDateString('es-PE', { weekday: 'long', timeZone: 'America/Lima' });
 
 
   let [_, name, splitter, age] = text.match(Reg)
@@ -54,9 +54,9 @@ regbot += `🕸️ \`FECHA\` » \`\`\`${fecha}\`\`\`\n`
 regbot += `🐋 \`HORA\` » \`\`\`${hora}\`\`\`\n`
 regbot += `🌿 \`DIA\` » \`\`\`${dia}\`\`\`\n\n`
 regbot += `🍹 RECOMPENSAS 🧪\n`
-regbot += `🪙 \`COINS: +40\n`
-regbot += `🏮 \`EXP: +300\n`
-regbot += `🔰 \`TOKENS: +20\n`
+regbot += `🪙 \`COINS:\` +40\n`
+regbot += `🏮 \`EXP:\` +300\n`
+regbot += `🔰 \`TOKENS:\` +20\n`
 regbot += `> ${club}`
 await m.react('📩')
 

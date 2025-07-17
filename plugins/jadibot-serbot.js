@@ -49,24 +49,18 @@ let rtx = `╔══════════════════════
 ║ ⚠  Este codigo QR Expira en
 ║     45 segundos
 ╚══════════════════════════╝`;
-let rtx2 = `╔══════════════════════════╗
-║ ✨💥  ＳＵＫＵＮＡ -  B O T  🛶✨ 
-╠══════════════════════════╣
-║ ⟿ 💛 Usa este codigo para convertirte
-║     en Sub-Bot ☄️
-╟──────────────────────────╢
-║                            
-║➥ \`1\` 🌐 Haga click en los ⋮ puntos
-║          en la esquina superior
-║          derecha.
-║➥ \`2\` 🌴 Toca dispositivos vinculados.
-║➥ \`3\` 🏷️ Selecciona vincular con el
-║         numero de teléfono
-║➥ \`4\` ⚽ Escriba el codigo.
-╟──────────────────────────╢
-║ ⚠  Este codigo solo funciona en el 
-║     Numero que lo solicito³.
-╚══════════════════════════╝`;
+let rtx2 = ` ✨💥  ＳＵＫＵＮＡ -  B O T  🌾✨ 
+
+⟿ 💛 Usa este codigo para convertirte
+en Sub-Bot ☄️
+
+\`1\` Haga click en los ⋮ puntos en la esquina superior derecha.
+\`2\` Toca dispositivos vinculados.
+\`3\` Selecciona vincular con el numero de teléfono
+\`4\` Escriba el codigo.
+
+> ⚠  Este codigo solo funciona en el Numero que lo solicito.
+> ✧ No es recomendable usar tu cuenta principal.`;
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
