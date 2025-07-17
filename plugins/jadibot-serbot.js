@@ -165,25 +165,37 @@ secret = secret.match(/.{1,4}/g)?.join("-")
 
 let imgPath = 'https://files.catbox.moe/vm6opf.jpg';
 
-let txtCode = await conn.sendMessage(m.chat, { 
-    text: rtx2,
-    contextInfo: {
-        mentionedJid: [m.sender, typeof userId !== 'undefined' ? userId : ''],
-        isForwarded: true,
-        forwardingScore: 999,
-        externalAdReply: {
-            title: "✧ ᴄᴏɴᴇxɪᴏɴ ᴅᴇ sᴜʙʙᴏᴛ ᴍᴏᴅᴇ: ᴄᴏᴅᴇꦿ✧",
-            body: "🌴 ＳＵＫＵＮＡ ＢＯＴ ＭＤ 💥",
-            thumbnailUrl: imgPath,
-            sourceUrl: 'https://github.com/the-27',
-            mediaType: 1,
-            showAdAttribution: true,
-            renderLargerThumbnail: true,
-        }
+let txtCode = await conn.sendMessage(m.chat, {
+  text: rtx2,
+  contextInfo: {
+    mentionedJid: [m.sender],
+    isForwarded: true,
+    forwardingScore: 999,
+    externalAdReply: {
+      title: "✧ ᴄᴏɴᴇxɪᴏɴ ᴅᴇ sᴜʙʙᴏᴛ ᴍᴏᴅᴇ: ᴄᴏᴅᴇꦿ✧",
+      body: "🌴 ＳＵＫＵＮＡ ＢＯＴ ＭＤ 💥",
+      thumbnailUrl: imgPath,
+      sourceUrl: 'https://github.com/the-27',
+      mediaType: 1,
+      showAdAttribution: true,
+      renderLargerThumbnail: true,
     }
+  }
 }, { quoted: m });
 
-let codeBot = await conn.reply(m.chat, `${secret}`, fkontak, rcanal);
+// Botón que solo muestra el código al hacer clic
+await conn.sendMessage(m.chat, {
+  text: '',
+  buttons: [
+    {
+      buttonId: `copiar_code_${secret}`,
+      buttonText: { displayText: '📋 Copiar código' },
+      type: 1
+    }
+  ],
+  footer: '',
+  headerType: 1
+}, { quoted: m });
 
 //txtCode = await conn.sendMessage(m.chat, {text : rtx2}, { quoted: m })
 //codeBot = await m.reply(secret)
