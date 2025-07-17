@@ -1,27 +1,22 @@
-import { search, download } from 'aptoide-scraper';
+import { search, download } from 'aptoide-scraper'
 
-const handler = async (m, { conn, usedPrefix, command, text }) => {
-  if (!text) return conn.reply(m.chat, `\`\`\`🌪️ Por favor, ingrese el nombre de la apk para descargarlo.\`\`\``, m, rcanal);
+var handler = async (m, {conn, usedPrefix, command, text}) => {
+if (!text) return conn.reply(m.chat, `${emoji} Por favor, ingrese el nombre de la apk para descargarlo.`, m, rcanal)
+try {
+await m.react(rwait)
+conn.reply(m.chat, `\`🍰 Descargando su aplicación, espere un momento...\``, m, rcanal)
+let searchA = await search(text)
+let data5 = await download(searchA[0].id)
+let txt = `*乂  APTOIDE - DESCARGAS* 乂\n\n`
+txt += `☁️ *Nombre* : ${data5.name}\n`
+txt += `🔖 *Package* : ${data5.package}\n`
+txt += `🚩 *Update* : ${data5.lastup}\n`
+txt += `⚖ *Peso* :  ${data5.size}`
+await conn.sendFile(m.chat, data5.icon, 'thumbnail.jpg', txt, m) 
+await m.react(done)  
+if (data5.size.includes('GB') || data5.size.replace(' MB', '') > 999) {
+return await conn.reply(m.chat, `${emoji2} El archivo es demaciado pesado.`, m)}
 
-  try {
-    await m.react('⏳');
-    conn.reply(m.chat, `\`🍰 Descargando su aplicación, espere un momento...\``, m, rcanal);
- 
-    const appData = await download(searchResult[0].id);
-
-    const details = `\`\`\`乂 APTOIDE - DESCARGA 乂\n
-☁️ Nombre   : ${appData.name}
-🔖 Paquete  : ${appData.package}
-🚩 Última actualización : ${appData.lastup}
-⚖ Tamaño   : ${appData.size}\`\`\``;
-
-    await conn.sendFile(m.chat, appData.icon, 'thumbnail.jpg', details, m);
-    await m.react('✅');
-    
-    if (appData.size.includes('GB') || parseFloat(appData.size.replace(' MB', '')) > 999) {
-      return conn.reply(m.chat, `⚠️ El archivo es demasiado pesado para enviarlo.`, m);
-    }
-   
     const caption = `*${appData.name}*\n\n> ${club}`;
     await conn.sendMessage(m.chat, {
       document: { url: appData.dllink },
@@ -41,18 +36,15 @@ const handler = async (m, { conn, usedPrefix, command, text }) => {
         }
       }
     }, { quoted: m });
+   
+} catch {
+return conn.reply(m.chat, `${msm} Ocurrió un fallo...`, m)}}
 
-  } catch (e) {
-    console.error('[APK ERROR]', e);
-    conn.reply(m.chat, `❌ Ocurrió un fallo al procesar la solicitud.`, m);
-  }
-};
-
-handler.tags = ['descargas'];
-handler.help = ['apk', 'modapk', 'aptoide'].map(v => v + ' <nombre>');
-handler.command = ['apk', 'modapk', 'aptoide'];
+handler.tags = ['descargas']
+handler.help = ['apkmod']
+handler.command = ['apk', 'modapk', 'aptoide']
 handler.group = true;
 handler.register = true;
 handler.coin = 5;
 
-export default handler;
+export default handler
