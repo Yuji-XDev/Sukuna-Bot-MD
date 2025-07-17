@@ -27,7 +27,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
                       `💰 *Precio:* ${app.price || 'Gratis'}\n` +
                       `🔗 *Enlace:* ${app.link || 'No disponible'}`;
 
-      await conn.sendFile(m.chat, app.icon || 'https://i.imgur.com/JP52fdP.png', 'app.jpg', caption, m);
+      await conn.sendFile(m.chat, app.icon || icono, 'app.jpg', caption, m);
     }
 
     await m.react('✅');
