@@ -1,109 +1,68 @@
-import fetch from 'node-fetch';
+import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysockets/baileys';
 import yts from 'yt-search';
-import FormData from 'form-data';
-import { generateWAMessageContent, generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) return m.reply(`🌪️ *Ejemplo:* ${usedPrefix + command} Bad Bunny`);
-
-  await m.react('🕓');
+const handler = async (m, { conn, usedPrefix, command, text }) => {
+  if (!text) throw `*🌴 Por favor, ingresa un texto para buscar en Youtube.*\n> *\`Ejemplo:\`* ${usedPrefix + command} Bing Bang`;
 
   const results = await yts(text);
-  const videos = results?.videos?.slice(0, 9);
-  if (!videos || videos.length === 0) return m.reply('❌ No se encontraron resultados en YouTube.');
+  const videos = results.videos.slice(0, 10);
 
-  shuffleArray(videos);
+  if (!videos.length) throw '⚠️ *No se encontraron resultados para tu búsqueda.*';
 
-  const push = [];
+  const randomVideo = videos[Math.floor(Math.random() * videos.length)];
 
-  for (const video of videos) {
-    const imageResponse = await fetch(video.thumbnail);
-    const imageBuffer = await imageResponse.buffer();
-    const enhancedImage = await remini(imageBuffer, 'enhance');
+  const media = await prepareWAMessageMedia(
+    { image: { url: randomVideo.thumbnail } },
+    { upload: conn.waUploadToServer }
+  );
 
-    push.push({
-      body: proto.Message.InteractiveMessage.Body.fromObject({
-        text: `◦ *Título:* ${video.title}\n◦ *Duración:* ${video.timestamp}\n◦ *Vistas:* ${video.views}`
-      }),
-      footer: proto.Message.InteractiveMessage.Footer.fromObject({ text: '' }),
-      header: proto.Message.InteractiveMessage.Header.fromObject({
-        hasMediaAttachment: true,
-        imageMessage: await createImage(enhancedImage, conn)
-      }),
-      nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
-        buttons: [
-          {
-            name: 'cta_copy',
-            buttonParamsJson: JSON.stringify({
-              display_text: 'Descargar audio! 💜',
-              copy_code: `.ytmp3 ${video.url}`
-            })
-          },
-          {
-            name: 'cta_copy',
-            buttonParamsJson: JSON.stringify({
-              display_text: 'Descargar video! 🍜',
-              copy_code: `.ytmp4 ${video.url}`
-            })
-          }
-        ]
-      })
-    });
-  }
-
-  const message = generateWAMessageFromContent(m.chat, {
-    viewOnceMessage: {
-      message: {
-        messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
-        interactiveMessage: proto.Message.InteractiveMessage.fromObject({
-          body: { text: `*🍓 Resultados de:* *${text}*` },
-          footer: { text: 'Desliza y toca "copiar", luego envía el comando que aparece 📥' },
-          header: { hasMediaAttachment: false },
-          carouselMessage: { cards: push }
-        })
-      }
+  const interactiveMessage = {
+    body: {
+      text: `> *Resultados:* \`${videos.length}\`\n\n*${randomVideo.title}*\n\n≡ 🌵 *\`Autor:\`* ${randomVideo.author.name}\n≡ 🍁 *\`Vistas:\`* ${randomVideo.views.toLocaleString()}\n≡ 🌿 *\`Enlace:\`* ${randomVideo.url}`
+    },
+    footer: { text: 'sᴜᴋᴜɴᴀ ʙᴏᴛ ᴍᴅ' },
+    header: {
+      title: '```乂 YOUTUBE - SEARCH```',
+      hasMediaAttachment: true,
+      imageMessage: media.imageMessage
+    },
+    nativeFlowMessage: {
+      buttons: [
+        {
+          name: 'single_select',
+          buttonParamsJson: JSON.stringify({
+            title: 'Opciones de descarga',
+            sections: videos.map(video => ({
+              title: `${video.title}`,
+              rows: [
+                {
+                  header: video.title,
+                  title: video.author.name,
+                  description: `𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋 𝖺𝗎𝖽𝗂𝗈 | Duración: ${video.timestamp}`,
+                  id: `.ytmp3 ${video.url}`
+                },
+                {
+                  header: video.title,
+                  title: video.author.name,
+                  description: `𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋 𝗏𝗂𝖽𝖾𝗈 | Duración: ${video.timestamp}`,
+                  id: `.ytmp4 ${video.url}`
+                }
+              ]
+            }))
+          })
+        }
+      ],
+      messageParamsJson: ''
     }
-  }, { quoted: m });
+  };
 
-  await conn.relayMessage(m.chat, message.message, { messageId: message.key.id });
-  await m.react('✅');
+  const userJid = conn?.user?.jid || m.key.participant || m.chat;
+  const msg = generateWAMessageFromContent(m.chat, { interactiveMessage }, { userJid, quoted: m });
+  conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
 };
 
-handler.help = ['ytsearch', 'yts'];
-handler.tags = ['search'];
-handler.command = ['ytsearch', 'yts'];
+handler.help = ['yts <texto>'];
+handler.tags = ['buscador'];
+handler.command = ['yts', 'ytsearch'];
 
 export default handler;
-
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-async function createImage(img, conn) {
-  const { imageMessage } = await generateWAMessageContent({ image: img }, { upload: conn.waUploadToServer });
-  return imageMessage;
-}
-
-async function remini(imageData, operation) {
-  return new Promise(async (resolve, reject) => {
-    const ops = ["enhance", "recolor", "dehaze"];
-    operation = ops.includes(operation) ? operation : "enhance";
-    const baseUrl = `https://inferenceengine.vyro.ai/${operation}.vyro`;
-
-    const formData = new FormData();
-    formData.append("image", Buffer.from(imageData), { filename: "image.jpg", contentType: "image/jpeg" });
-    formData.append("model_version", 1);
-
-    formData.submit({ url: baseUrl, protocol: "https:" }, (err, res) => {
-      if (err) return reject(err);
-      const chunks = [];
-      res.on("data", chunk => chunks.push(chunk));
-      res.on("end", () => resolve(Buffer.concat(chunks)));
-      res.on("error", err => reject(err));
-    });
-  });
-}
