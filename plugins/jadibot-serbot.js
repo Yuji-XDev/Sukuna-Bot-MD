@@ -164,47 +164,35 @@ let secret = await sock.requestPairingCode((m.sender.split`@`[0]))
 secret = secret.match(/.{1,4}/g)?.join("-")
 
 let imgPath = 'https://files.catbox.moe/vm6opf.jpg';
-let imgBuffer = await (await fetch(imgPath)).buffer();
+const mediaMsg = await conn.sendMessage(m.chat, {
+  image: { url: imgPath },
+  caption: '',
+}, { quoted: m });
 
-const messageContent = {
-  viewOnceMessage: {
-    message: {
-      messageContextInfo: {
-        deviceListMetadata: {},
-        deviceListMetadataVersion: 2
-      },
-      interactiveMessage: proto.Message.InteractiveMessage.create({
-        body: proto.Message.InteractiveMessage.Body.create({
-          text: rtx2
-        }),
-        footer: proto.Message.InteractiveMessage.Footer.create({
-          text: 'ＳＵＫＵＮＡ - ʙᴏᴛ ᴍᴅ'
-        }),
-        header: proto.Message.InteractiveMessage.Header.create({
-          hasMediaAttachment: true,
-          imageMessage: {
-            jpegThumbnail: imgBuffer
-          }
-        }),
-        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-          buttons: [
-            {
-              name: 'cta_copy',
-              buttonParamsJson: JSON.stringify({
-                display_text: '📋 Copiar código',
-                copy_code: secret
-              })
-            }
-          ]
-        })
-      })
+
+const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+  interactiveMessage: {
+    body: { text: rtx2 },
+    footer: { text: 'Powered by Dev.Shadow 🇦🇱' },
+    header: {
+      hasMediaAttachment: false,
+      imageMessage: mediaMsg.message.imageMessage
+    },
+    nativeFlowMessage: {
+      buttons: [
+        {
+          name: 'cta_copy',
+          buttonParamsJson: JSON.stringify({
+            display_text: '🖍️ Copiar Codigo',
+            copy_code: secret
+          })
+        }
+      ]
     }
   }
-};
+}), { quoted: m });
 
-// Enviar el mensaje respondiendo al usuario
-let txtCode = generateWAMessageFromContent(m.chat, messageContent, { quoted: m });
-await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+txtCode = await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
 
 //txtCode = await conn.sendMessage(m.chat, {text : rtx2}, { quoted: m })
 //codeBot = await m.reply(secret)
