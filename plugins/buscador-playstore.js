@@ -1,37 +1,41 @@
-
 import fetch from 'node-fetch';
 
-const handler = async (m, { conn, args }) => {
+const handler = async (m, { conn, args, usedPrefix, command }) => {
   if (!args[0]) {
-    return conn.reply(m.chat, '🤖 Por favor, proporciona el nombre de la aplicación que deseas buscar.\nEjemplo: .playstore WhatsApp', m);
+    return conn.reply(m.chat, `🔍 *Uso correcto:* ${usedPrefix}${command} <nombre de app>\n\nEjemplo: ${usedPrefix}${command} WhatsApp`, m);
   }
 
   const query = args.join(' ');
   const apiUrl = `https://api.vreden.my.id/api/playstore?query=${encodeURIComponent(query)}`;
 
   try {
-    await m.react('⏳');
+    await m.react('🔎');
 
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+    const res = await fetch(apiUrl);
+    const json = await res.json();
 
-    if (!data || !data.result || data.result.length === 0) {
-      return conn.reply(m.chat, '❌ No se encontraron aplicaciones. Intenta con otro nombre.', m);
+    if (!json.result || json.result.length === 0) {
+      return conn.reply(m.chat, `❌ No se encontraron resultados para: *${query}*`, m);
     }
 
-    let results = `📱 *Resultados de la búsqueda en Play Store para:* ${query}\n\n`;
-    data.result.forEach((app, index) => {
-      results += `🔗 [Enlace ${index + 1}](${app.link || 'Enlace no disponible'})\n`;
-    });
+    const apps = json.result.slice(0, 5);
 
-    await conn.reply(m.chat, results.trim(), m);
+    for (const app of apps) {
+      const caption = `📲 *${app.title}*\n\n` +
+                      `👤 *Desarrollador:* ${app.developer || 'Desconocido'}\n` +
+                      `⭐ *Puntuación:* ${app.score || 'No disponible'}\n` +
+                      `💰 *Precio:* ${app.price || 'Gratis'}\n` +
+                      `🔗 *Enlace:* ${app.link || 'No disponible'}`;
+
+      await conn.sendFile(m.chat, app.icon || 'https://i.imgur.com/JP52fdP.png', 'app.jpg', caption, m);
+    }
+
     await m.react('✅');
 
-  } catch (error) {
-    console.error('Error al realizar la búsqueda:', error);
-    await m.react('❌'); 
-
-    conn.reply(m.chat, `❌ Ocurrió un error al realizar la búsqueda: ${error.message}`, m);
+  } catch (err) {
+    console.error(err);
+    await m.react('⚠️');
+    conn.reply(m.chat, `❌ Error al buscar la app:\n*${err.message}*`, m);
   }
 };
 
