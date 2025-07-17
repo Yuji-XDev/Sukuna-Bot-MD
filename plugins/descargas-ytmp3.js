@@ -1,147 +1,86 @@
-/*// codigo creado por Black.ofc 💥
-// no robes creaditos
+// Código creado por Dev.Shadow 🇦🇱
 
 import fetch from 'node-fetch';
+import yts from 'yt-search';
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) return m.reply(`*⛩️ Ingresa un link de YouTub'e 🌲*`);
-
+const handler = async (m, { conn, text, command }) => {
   try {
-
-    await conn.sendMessage(m.chat, { react: { text: '⏱️', key: m.key }});
-
-    const api = `https://api.stellarwa.xyz/dow/ytmp3?url=${url}&apikey=Dev.Shadow`;
-    const res = await fetch(api);
-    const json = await res.json();
-
-    if (!json.status || !json.result || !json.result.downloadUrl) {
-      return m.reply('❌ ocurrio un error intenta con otro titulo.');
+    if (!text) {
+      return conn.reply(m.chat, `*⛩️ Ingresa un link de YouTub'e 🌲*`, m, rcanal);
     }
 
-    const { title, channel, duration, cover } = json.result.metadata;
-    const downloadUrl = json.result.downloadUrl;
-    const sourceUrl = json.result.metadata.url || text;
+    const search = await yts(text);
+    const video = search.videos[0];
 
-    let thumb;
-    try {
-      const thumbRes = await conn.getFile(cover);
-      thumb = thumbRes?.data;
-    } catch {
-      thumb = null;
+    if (!video) {
+      return conn.reply(m.chat, '❌ No se encontraron resultados para tu búsqueda.', m);
     }
+
+    const { title, timestamp, views, ago, url, author, thumbnail } = video;
+
+    const canal = author?.name || 'Desconocido';
+    const vistas = views.toLocaleString();
+
+    const textoInfo = `✨ *Resultado Encontrado:*\n\n`
+      + `📌 *Título:* ${title}\n`
+      + `⏱️ *Duración:* ${timestamp}\n`
+      + `📺 *Canal:* ${canal}\n`
+      + `👀 *Vistas:* ${vistas}\n`
+      + `📆 *Publicado:* ${ago}\n`
+      + `🔗 *Enlace:* ${url}`;
+
+    const thumbnailBuffer = await (await fetch(thumbnail)).buffer();
 
     await conn.sendMessage(m.chat, {
-      audio: { url: downloadUrl },
-      mimetype: 'audio/mpeg',
-      ptt: false,
+      image: thumbnailBuffer,
+      caption: textoInfo,
       contextInfo: {
         externalAdReply: {
           title: title,
-          body: `YOUTUBE • MP3`,
-          mediaUrl: sourceUrl,
-          sourceUrl: sourceUrl,
-          thumbnail: thumb,
+          body: 'YOUTUBE • DESCARGA MP3',
+          mediaType: 1,
+          thumbnail: thumbnailBuffer,
+          mediaUrl: url,
+          sourceUrl: url,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: m });
+
+
+    const api = `https://api.stellarwa.xyz/dow/ytmp3?url=${url}&apikey=stellar-7SQpl4Ah`;
+    const res = await fetch(api);
+    const json = await res.json();
+
+    if (!json || !json.data || !json.data.dl) {
+      throw new Error('⚠️ No se pudo generar el enlace de descarga.');
+    }
+
+    await conn.sendMessage(m.chat, {
+      audio: { url: json.data.dl },
+      mimetype: 'audio/mpeg',
+      fileName: `${title}.mp3`,
+      contextInfo: {
+        externalAdReply: {
+          title: title,
+          body: 'Descarga completada ✔️',
+          thumbnail: thumbnailBuffer,
+          mediaUrl: url,
+          sourceUrl: url,
           mediaType: 1,
           renderLargerThumbnail: true
         }
       }
-    }, { quoted: fkontak });
-
-
-    await conn.sendMessage(m.chat, { react: { text: '✔️', key: m.key }});
-
-  } catch (e) {
-    console.error(e);
-    m.reply('⚠️ Ocurrió un error al procesar el audio. Intenta de nuevo.');
-
-    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key }});
-  }
-};
-
-handler.help = ['ytmp3'].map(v => v + ' <nombre o link>');
-handler.tags = ['downloader'];
-handler.command = ['ytmp3', 'yta'];
-
-export default handler;*/
-
-
-
-import fetch from "node-fetch";
-import yts from 'yt-search';
-import axios from "axios";
-
-const handler = async (m, { conn, text, usedPrefix, command }) => {
-  let user = global.db.data.users[m.sender];
-
-  try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, `✧ Ingresa el nombre de la música a descargar.`, m);
-    }
-
-    const search = await yts(text);
-    if (!search.all || search.all.length === 0) {
-      return m.reply('No se encontraron resultados para tu búsqueda.');
-    }
-
-    const videoInfo = search.all[0];
-    const { title, thumbnail, timestamp, views, ago, url, author } = videoInfo;
-    const vistas = formatViews(views);
-    const canal = author?.name || 'Desconocido';
-
-    const infoMessage = `*Título:* ${title}
-*Duración:* ${timestamp}
-*Vistas:* ${vistas}
-*Canal:* ${canal}
-*Publicado:* ${ago}
-*URL:* ${url}`;
-
-    const thumb = (await conn.getFile(thumbnail))?.data;
-
-    const JT = {
-      contextInfo: {
-        externalAdReply: {
-          title: botname,
-          body: dev,
-          mediaType: 1,
-          previewType: 0,
-          mediaUrl: url,
-          sourceUrl: url,
-          thumbnail: thumb,
-          renderLargerThumbnail: true,
-        },
-      },
-    };
-
-    await conn.reply(m.chat, infoMessage, m, JT);
-
-    const apiAudioUrl = `https://api.stellarwa.xyz/dow/ytmp3?url=${url}&apikey=diamond`;
-    const response = await fetch(apiAudioUrl);
-    const json = await response.json();
-    const { dl } = json.data;
-
-    if (!dl) throw new Error('No se generó el enlace de descarga.');
-
-    await conn.sendMessage(m.chat, {
-      audio: { url: dl },
-      fileName: `${title}.mp3`,
-      mimetype: 'audio/mpeg'
     }, { quoted: m });
 
-  } catch (error) {
-    console.error('Error al enviar audio:', error);
-    return m.reply(`⚠︎ Ocurrió un error: ${error}`);
+  } catch (e) {
+    console.error('❌ Error en ytmp3:', e);
+    return conn.reply(m.chat, `❌ *Error:* ${e.message}`, m);
   }
 };
 
-handler.command = handler.help = ['ytmp3'];
-handler.tags = ['downloader'];
+handler.command = ['ytmp3', 'ytaudio'];
+handler.tags = ['descargas'];
+handler.help = ['ytmp3 <nombre o link>'];
 
 export default handler;
-
-function formatViews(views) {
-  if (views === undefined) return "No disponible";
-  if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B (${views.toLocaleString()})`;
-  if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M (${views.toLocaleString()})`;
-  if (views >= 1_000) return `${(views / 1_000).toFixed(1)}k (${views.toLocaleString()})`;
-  return views.toString();
-}
