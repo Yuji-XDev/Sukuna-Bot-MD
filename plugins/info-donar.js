@@ -1,4 +1,4 @@
-let media = './media/menus/Menu4paypal.jpg'
+let media = './src/catalogo.jpg'
 let handler = async (m, { conn, command }) => {
 let user = db.data.users[m.sender]
 let text = `Hola y Adios
