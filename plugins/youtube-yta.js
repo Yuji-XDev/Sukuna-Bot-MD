@@ -1,48 +1,47 @@
-/*// codigo creado por Black.ofc
-// no robes creaditos, XD
-
 import fetch from 'node-fetch';
+import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
 
-const handler = async (m, { conn, text, args, usedPrefix, command }) => {
-  if (!text) return m.reply(`*🌪️ Ingresa el nombre o link de un video de YouTube.*`);
+const handler = async (m, { conn, text }) => {
+  if (!text) return m.reply('🎧 Ingresa el enlace de YouTube.\n*Ejemplo:* .ytmp3 https://youtu.be/TdrL3QxjyVw');
 
   try {
-    const api = `https://api.nekorinn.my.id/downloader/ytplay?q=${encodeURIComponent(text)}`;
+    await m.react('🎶');
+
+    const api = `https://delirius-apiofc.vercel.app/download/ytmp3?url=${encodeURIComponent(text)}`;
     const res = await fetch(api);
     const json = await res.json();
 
-    if (!json.status || !json.result || !json.result.downloadUrl) {
-      return m.reply('*❌ No se pudo obtener el audio. Intenta con otro título.*');
-    }
+    if (!json.estado) return m.reply('❌ No se pudo obtener el audio. Asegúrate de que el enlace sea válido.');
 
-    const { title, channel, duration, cover, url } = json.result.metadata;
-    const downloadUrl = json.result.downloadUrl;
+    const data = json.datos;
+    const texto = `
+🌸 *${data.nombre}*
+🎙️ *Artistas:* ${data.artistas}
+⏱️ *Duración:* ${data.duración}
+📥 *Descarga disponible abajo*
+`.trim();
 
-    await conn.sendMessage(m.chat, {
-      image: { url: cover },
-      caption: `➤ 🌴 *𝚃𝙸𝚃𝚄𝙻𝙾:* ${title}\n➤ 🌪️ *Canal:* ${channel}\n➤ ⏱ *Duración:* ${duration}\n➤ 🏞️ *Link:* ${url}`,
-      contextInfo: {
-        externalAdReply: {
-          title: title,
-          body: '☄️ DESCARGAS - PLAY ⛩️',
-          thumbnailUrl: cover,
-          sourceUrl: url,
-          mediaType: 1,
-          renderLargerThumbnail: true
+    const message = {
+      image: { url: data.imagen },
+      caption: texto,
+      footer: '✨ Sukuna - Bot MD',
+      buttons: [
+        {
+          buttonId: data.descargar,
+          buttonText: { displayText: '🎧 Descargar MP3' },
+          type: 1
         }
-      }
-    }, { quoted: m });
+      ],
+      headerType: 4
+    };
 
-    await conn.sendMessage(m.chat, { audio: { url: downloadUrl }, mimetype: 'audio/mpeg', fileName: `${title}.mp3` }, { quoted: fkontak });
+    await conn.sendMessage(m.chat, message, { quoted: m });
 
   } catch (e) {
     console.error(e);
-    m.reply('*⚠️ Ocurrió un error al procesar el video*.');
+    m.reply('⚠️ Error al procesar la solicitud.');
   }
 };
 
-handler.help = ['play'].map(v => v + ' <texto|url>');
-handler.tags = ['downloader'];
-handler.command = ['play'];
-
-export default handler;*/
+handler.command = ['mp3yt', 'ytmusica'];
+export default handler;
