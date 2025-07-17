@@ -21,7 +21,7 @@ const handler = async (m, { conn, text, command }) => {
     const canal = author?.name || 'Desconocido';
     const vistas = views.toLocaleString();
 
-    const textoInfo = `╭━━〔 *⛩️  YT  -  MP3 🌪️* 〕━━⬣\n\n`
+    const textoInfo = `╭━━〔 *⛩️  YT  -  MP3 🌪️* 〕━━⬣\n`
       + `┃ ✦🌾 *Título:* ${title}\n`
       + `┃ ✦⏱️ *Duración:* ${timestamp}\n`
       + `┃ ✦🍰 *Canal:* ${canal}\n`
@@ -33,9 +33,6 @@ const handler = async (m, { conn, text, command }) => {
     const thumbnailBuffer = await (await fetch(thumbnail)).buffer();
 
     await conn.sendFile(m.chat, thumbnailBuffer, 'ytmp3.jpg', textoInfo, m);
-
-    // 📥 Reacción: descargando
-    await conn.sendMessage(m.chat, { react: { text: '📥', key: m.key }});
 
     const api = `https://api.stellarwa.xyz/dow/ytmp3?url=${url}&apikey=stellar-7SQpl4Ah`;
     const res = await fetch(api);
