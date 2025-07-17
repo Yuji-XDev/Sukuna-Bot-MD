@@ -1,16 +1,21 @@
 import fetch from 'node-fetch';
 
 const handler = async (m, { conn, usedPrefix }) => {
-  await m.react('💔');
+  await m.react('🌪️');
 
   try {
-    const _muptime = process.uptime() * 1000
-    const muptime = clockString(_muptime)
-    
+    const _muptime = process.uptime() * 1000;
+    const muptime = clockString(_muptime);
+
     const hora = new Date().toLocaleTimeString('es-PE', { timeZone: 'America/Lima' });
     
+    const fechaObj = new Date();
+    const fecha = fechaObj.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' });
+    const dia = fechaObj.toLocaleDateString('es-PE', { weekday: 'long', timeZone: 'America/Lima' });
+
     const totalreg = Object.keys(global.db.data.users).length;
     const totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length;
+
     const texto = `╭̇╌̣╌̇╌̣━̇━̣╴╴╴╴╴╴╴╴╴╴̣━̇━̣╌̇╌̣╌̇╮
 │👤╴╴╴❨ᴜ❩.s.ᴇ.ʀ╴╴╴╴╴╴╴𐃙
 ╰─⃜┈⃨𖨠̇⁕໑̣٨ִــִׁﮩ♡̫𝐇̣𑜰̣𝐥𑜅 ᴜ꯭ᴡ꯭ᴜ♡ִ̫ﮩ٨ﮩׅ᪤̇⁕⃨┈⃛⟡
@@ -28,8 +33,7 @@ const handler = async (m, { conn, usedPrefix }) => {
 │ *🛡️ ᴍᴏᴅᴏ:* [ Privado ]
 │ *⏱️ ᴛɪᴇᴍᴘᴏ ᴀᴄᴛɪᴠᴏ:* [ ${muptime} ]
 │ ✦ Info » System 🅢
-╰────────────────•°•°
-
+╰────────────────•°•
 
 ╭┈ ↷
 │ ✐ ꒷ꕤ👻 \`ɪɴғᴏ - ᴜsᴇʀ\` ☄︎
@@ -40,15 +44,14 @@ const handler = async (m, { conn, usedPrefix }) => {
 │ *⚡ xᴘ ᴛᴏᴛᴀʟ:* [ ${global.db.data.users[m.sender]?.exp || 0} ]
 │ *👑 ʀᴏʟ:* [ ${global.db.data.users[m.sender]?.role || '𝙎𝙞𝙣 𝙍𝙖𝙣𝙜𝙤'} ] 
 │ ✦ Info » User 🅘
-╰────────────────•°•°
-
+╰────────────────•°•
 
 ╭┈ ↷
 │ ✐ ꒷ꕤ🍄ദ \`ɪɴғᴏ - ғᴇᴄʜᴀ\`  ☄
 ├┈・──・──・﹕₊˚ ✦・୨୧・
 │ *🕒 ʜᴏʀᴀ:* ${hora}
-│ *📅 ғᴇᴄʜᴀ:* ${fecha} fecha que sea asi ejemplo 18 de julio de 2025 solo es un ejemplo para que lo agas y lo envie el bot 
-│ *🗓️ ᴅíᴀ:* ${dia} aqui tambien lunes martes los 7 dias de la semna 
+│ *📅 ғᴇᴄʜᴀ:* ${fecha}
+│ *🗓️ ᴅíᴀ:* ${dia}
 │ ✦ Info » Time 🅣
 ╰────────────────•°•°
 
@@ -69,7 +72,8 @@ const handler = async (m, { conn, usedPrefix }) => {
 │•ꪶᳱꫂ \`#ᴍᴇɴᴜᴅʟ\`
 │•ꪶᳱꫂ \`#ᴍᴇɴᴜʀᴘɢ\`
 │•ꪶᳱꫂ \`#ᴍᴇɴᴜsᴛɪᴄᴋᴇʀ\`
-╰╌┈─━╌─━╌⃨╼⃛⬥⬥⃛╾⃨╌━─╌━─┈╌╯`;
+╰╌┈─━╌─━╌⃨╼⃛⬥⬥⃛╾⃨╌━─╌━─┈╌╯
+`;
 
     const imagen = 'https://files.catbox.moe/35wxsf.jpg';
     const imgBuffer = await (await fetch(imagen)).buffer();
@@ -137,9 +141,9 @@ handler.command = ['menulist'];
 
 export default handler;
 
-
 function clockString(ms) {
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')}
+  let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
+  let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
+  let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
+  return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
+}
