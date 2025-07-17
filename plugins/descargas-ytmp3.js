@@ -4,30 +4,31 @@
 import fetch from 'node-fetch';
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) return m.reply(`*⛩️ Ingresa un link de YouTub'e 🌲*`);
+  if (!text) return m.reply(`*⛩️ Ingresa un link o nombre de YouTube 🌲*`);
 
   try {
-
-    await conn.sendMessage(m.chat, { react: { text: '⏱️', key: m.key }});
+    await conn.sendMessage(m.chat, { react: { text: '⏱️', key: m.key } });
 
     const api = `https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`;
     const res = await fetch(api);
+
+    if (!res.ok) throw new Error('No se pudo conectar con la API');
+
     const json = await res.json();
 
     if (!json.status || !json.result || !json.result.downloadUrl) {
-      return m.reply('❌ ocurrio un error intenta con otro titulo.');
+      return m.reply('❌ Ocurrió un error. Intenta con otro título o link.');
     }
 
-    const { title, channel, duration, cover } = json.result.metadata;
+    const { title, channel, duration, cover, url: sourceUrl } = json.result.metadata;
     const downloadUrl = json.result.downloadUrl;
-    const sourceUrl = json.result.metadata.url || text;
 
-    let thumb;
+    let thumb = null;
     try {
       const thumbRes = await conn.getFile(cover);
       thumb = thumbRes?.data;
-    } catch {
-      thumb = null;
+    } catch (e) {
+      console.warn('No se pudo obtener la miniatura:', e);
     }
 
     await conn.sendMessage(m.chat, {
@@ -38,8 +39,8 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
         externalAdReply: {
           title: title,
           body: `YOUTUBE • MP3`,
-          mediaUrl: sourceUrl,
-          sourceUrl: sourceUrl,
+          mediaUrl: sourceUrl || text,
+          sourceUrl: sourceUrl || text,
           thumbnail: thumb,
           mediaType: 1,
           renderLargerThumbnail: true
@@ -47,14 +48,12 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       }
     }, { quoted: fkontak });
 
-
-    await conn.sendMessage(m.chat, { react: { text: '✔️', key: m.key }});
+    await conn.sendMessage(m.chat, { react: { text: '✔️', key: m.key } });
 
   } catch (e) {
-    console.error(e);
-    m.reply('⚠️ Ocurrió un error al procesar el audio. Intenta de nuevo.');
-
-    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key }});
+    console.error('[ERROR YTMP3]', e);
+    m.reply('⚠️ Ocurrió un error al procesar el audio. Intenta de nuevo más tarde.');
+    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
   }
 };
 
