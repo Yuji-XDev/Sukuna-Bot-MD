@@ -51,6 +51,8 @@ const handler = async (m, { conn, text, command }) => {
       fileName: `${title}.mp3`,
       contextInfo: {
         externalAdReply: {
+          title: title,
+          body: 'YOUTUBE • MP3',
           mediaType: 1,
           thumbnail: thumbnailBuffer,
           mediaUrl: url,
