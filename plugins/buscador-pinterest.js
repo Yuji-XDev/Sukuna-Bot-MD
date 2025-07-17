@@ -39,7 +39,7 @@ export default handler;
 
 const pins = async (query) => {
   try {
-    const { data } = await axios.get(`https://api.stellarwa.xyz/search/pinterest?query=${encodeURIComponent(query)}`);
+    const { data } = await axios.get(`https://delirius-apiofc.vercel.app/search/pinterest?text=${encodeURIComponent(query)}`);
 
     if (data?.status && data?.data?.length) {
       return data.data.map(item => ({
