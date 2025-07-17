@@ -1,52 +1,3 @@
-/*import fetch from 'node-fetch';
-
-let handler = async (m, { conn, args, text, command }) => {
-  if (!text) {
-    return m.reply('🎄 *Por favor, ingresa una URL válida de YouTube.*');
-  }
-
-  if (!/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(text)) {
-    return m.reply('🌛 *El enlace proporcionado no parece ser de YouTube.*');
-  }
-
-  m.react('⏳');
-
-  try {
-    const res = await fetch(`https://api.neoxr.eu/api/youtube?url=${encodeURIComponent(text)}&type=video&quality=480p&apikey=GataDios`);
-    const json = await res.json();
-
-    if (!json.status || !json.data?.url) {
-      return m.reply('*✖️ No se pudo obtener el video. Intenta con otro enlace.*');
-    }
-
-    await conn.sendMessage(m.chat, {
-      video: { url: json.data.url },
-      mimetype: 'video/mp4',
-      caption: `╭━🎬 *YOUTUBE VIDEO DOWNLOADER* ━⬣
-┃🌴 *Título:* ${json.data.title || 'No disponible'}
-┃🌪️ *Publicado:* ${json.data.published || 'No disponible'}
-┃🌲 *Duración:* ${json.data.duration || 'Estandar'}
-┃🏞️ *Calidad:* 480p
-╰━━━━━━━━━━━━━━━━━━━━⬣
-
-✅ *Descarga completa con éxito.*  
-⛩️ _By Sukuna Bot MD_ ⛩️`,
-    }, { quoted: m });
-
-    m.react('✅');
-  } catch (error) {
-    console.error(error);
-    m.reply('*✖️ Ocurrió un error al procesar tu solicitud.*');
-    m.react('✖️');
-  }
-};
-
-handler.command = handler.help = ['ytv'];
-handler.tags = ['downloader'];
-
-export default handler;*/
-
-
 import fetch from "node-fetch";
 import axios from 'axios';
 import yts from 'yt-search';
@@ -69,7 +20,6 @@ const handler = async (m, { conn, text, usedPrefix, command, args }) => {
       videoInfo = result;
       urlYt = text;
     } else {
-  
       const search = await yts(text);
       if (!search || !search.videos || !search.videos.length) {
         return conn.reply(m.chat, `⚠️ No se encontraron resultados para: *${text}*`, m);
@@ -85,29 +35,39 @@ const handler = async (m, { conn, text, usedPrefix, command, args }) => {
       author = {},
       views = 0,
       ago = 'Desconocido',
-      url = urlYt
+      url = urlYt,
+      thumbnail
     } = videoInfo;
 
     const canal = author.name || 'Desconocido';
     const vistas = views.toLocaleString('es-PE');
-
 
     const json = await ytdl(url);
     const size = await getSize(json.url);
     const sizeStr = size ? await formatSize(size) : 'Desconocido';
 
     const textoInfo =
-      `╭━━〔 *⛩️  YT  -  MP4 🌪️* 〕━━⬣\n` +
-      `┃ ✦🌾 *Título:* ${title}\n` +
-      `┃ ✦⏱️ *Duración:* ${timestamp}\n` +
-      `┃ ✦🍰 *Canal:* ${canal}\n` +
-      `┃ ✦🌧️ *Vistas:* ${vistas}\n` +
-      `┃ ✦🌳 *Publicado:* ${ago}\n` +
-      `┃ ✦💾 *Tamaño:* ${sizeStr}\n` +
-      `┃ ✦🔗 *Enlace:* ${url}\n` +
-      `╰━━━━━━━━━━━━━━━━━━⬣\n> *➭ El video se está enviando, espera un momento...*`;
+      `╭━━━〔 *⛩️ YOUTUBE - MP4 🌪️* 〕━━⬣\n` +
+      `┃ 📌 *Título:* ${title}\n` +
+      `┃ ⏱️ *Duración:* ${timestamp}\n` +
+      `┃ 🧑‍🏫 *Canal:* ${canal}\n` +
+      `┃ 👁️ *Vistas:* ${vistas}\n` +
+      `┃ 🗓️ *Publicado:* ${ago}\n` +
+      `┃ 💾 *Tamaño:* ${sizeStr}\n` +
+      `┃ 🔗 *Enlace:* ${url}\n` +
+      `╰━━━━━━━━━━━━━━━━━━━━⬣\n\n` +
+      `*➤ El video se está procesando y será enviado pronto...*`;
 
-    await conn.sendMessage(m.chat, { text: textoInfo }, { quoted: m });
+
+    await conn.sendMessage(m.chat, {
+      image: { url: thumbnail }
+    }, { quoted: m });
+
+
+    await conn.sendMessage(m.chat, {
+      text: textoInfo
+    }, { quoted: m });
+
     await conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${title}.mp4`, '', m);
     m.react('✅');
 
@@ -117,7 +77,7 @@ const handler = async (m, { conn, text, usedPrefix, command, args }) => {
   }
 };
 
-handler.help = ['ytv <texto|enlace>'];
+handler.help = ['ytv <link>'];
 handler.command = ['ytv'];
 handler.tags = ['dl'];
 
