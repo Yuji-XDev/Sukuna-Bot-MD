@@ -24,7 +24,7 @@ var handler = async (m, { conn, usedPrefix, command, text }) => {
       return await conn.reply(m.chat, `⚠️ El archivo es demasiado pesado.`, m);
     }
 
-    const caption = `*${data5.name}*\n\n> Powered by ShadowCore`;
+    const caption = `*${data5.name}*\n> ${club}`;
 
     await conn.sendMessage(m.chat, {
       document: { url: data5.dllink },
@@ -35,7 +35,7 @@ var handler = async (m, { conn, usedPrefix, command, text }) => {
       contextInfo: {
         externalAdReply: {
           title: data5.name,
-          body: `Powered by ShadowCore`,
+          body: `Powered by Dev.Shadow 👻`,
           mediaUrl: null,
           sourceUrl: null,
           thumbnailUrl: data5.icon,
