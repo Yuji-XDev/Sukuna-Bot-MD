@@ -26,12 +26,12 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 
 
 const caption = `╭  ✦ \`\`\`Result Play\`\`\` ✦  ╮  
-✧ titulo: ${video.titulo || 'no encontrado'}
-✧ publicado: ${video.publicado || 'no encontrado'}
-✧ canal: ${video.canal || 'no encontrado'}
-✧ duracion: ${video.duracion || 'no encontrado'}
-✧ vistas: ${video.vistas || 'no encontrado'}
-✧ url: ${video.url}`;
+*✧ titulo:* ${video.titulo || 'no encontrado'}
+*✧ publicado:* ${video.publicado || 'no encontrado'}
+*✧ canal:* ${video.canal || 'no encontrado'}
+*✧ duracion:* ${video.duracion || 'no encontrado'}
+*✧ vistas:* ${video.vistas || 'no encontrado'}
+*✧ url:* ${video.url}`;
     let ytSections = searchResults.slice(1, 11).map((v, index) => ({
       title: `${index + 1}┃ ${v.titulo}`,
       rows: [
