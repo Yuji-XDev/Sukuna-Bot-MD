@@ -1,8 +1,14 @@
 let handler = async (m, { conn, args }) => {
   let userId = m.mentionedJid?.[0] || m.sender
   let user = global.db.data.users[userId]
-  let name = conn.getName(userId)
+  let name = await conn.getName(userId) // Se necesita await
   let img = 'https://files.catbox.moe/ha863t.jpg'
+
+
+  let botname = global.botname || 'Sukuna Bot MD'
+  let banner = global.banner || 'https://files.catbox.moe/ha863t.jpg'
+  let redes = global.redes || 'https://github.com'
+
   let perfiltext = ` ${name}
      ╔═══════ • ° ❁⊕❁ ° • ═══════╗
         💥⃢᭄͜═✩═[𝐌𝐄𝐍𝐔-𝐒𝐄𝐀𝐑𝐂𝐇]═✩═⃟⃢᭄͜🔎
@@ -46,34 +52,8 @@ let handler = async (m, { conn, args }) => {
     { buttonId: '.menu', buttonText: { displayText: '♦ menu ♦' }, type: 1 }
   ]
 
-  let buttonMessage = {
-    text: perfiltext,
-    buttons: buttons,
-    headerType: 1,
-    contextInfo: {
-      mentionedJid: [m.sender, userId],
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-        newsletterJid: global.canalIdM,
-        newsletterName: global.botname,
-        serverMessageId: -1,
-      },
-      forwardingScore: 999,
-      externalAdReply: {
-        title: botname,
-        body: "Shadow'Core",
-        thumbnailUrl: banner,
-        sourceUrl: redes,
-        mediaType: 1,
-        showAdAttribution: true,
-        renderLargerThumbnail: true,
-      },
-    }
-  }
-
-
   await conn.sendMessage(m.chat, {
-    video: { url: img, gifPlayback: true },
+    video: { url: img },
     caption: perfiltext,
     gifPlayback: true,
     buttons: buttons,
@@ -83,7 +63,7 @@ let handler = async (m, { conn, args }) => {
       isForwarded: true,
       forwardedNewsletterMessageInfo: {
         newsletterJid: global.canalIdM,
-        newsletterName: global.botname,
+        newsletterName: botname,
         serverMessageId: -1,
       },
       forwardingScore: 999,
