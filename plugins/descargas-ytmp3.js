@@ -88,14 +88,12 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const vistas = formatViews(views);
     const canal = author?.name || 'Desconocido';
 
-    const infoMessage = `
-*𖹭.╭╭ִ╼࣪━ִﮩ٨ـﮩ♡̫𝗆𝖾𝗀֟፝𝗎꯭𝗆𝗂꯭𝗇𖦹ׅ♡ִ̫ﮩ٨ـﮩ━ִ╾࣪╮╮.𖹭*
-> ♡ *Título:* ${title}
-> ♡ *Duración:* ${timestamp}
-> ♡ *Vistas:* ${vistas}
-> ♡ *Canal:* ${canal}
-> ♡ *Publicado:* ${ago}
-`;
+    const infoMessage = `*Título:* ${title}
+*Duración:* ${timestamp}
+*Vistas:* ${vistas}
+*Canal:* ${canal}
+*Publicado:* ${ago}
+*URL:* ${url}`;
 
     const thumb = (await conn.getFile(thumbnail))?.data;
 
