@@ -20,7 +20,7 @@ const handler = async (m, { conn, usedPrefix }) => {
 • ✐; Cʀᴇᴀᴅᴏʀ » Dev.Shadow 🇦🇱
 ├┈・──・──・﹕₊˚ ✦・୨୧・
 │ *👨💻 ᴄʀᴇᴀᴅᴏʀ:* [ wa.link/z1w9sq ]
-│ *🔖 ᴠᴇʀsɪóɴ:* [ ${ᴠs} ]
+│ *🔖 ᴠᴇʀsɪóɴ:* [ 2.2.0 ]
 │ *👥 ᴜsᴜᴀʀɪᴏs:* [ ${totalreg} ]
 │ *🖍️ ᴄᴏᴍᴀɴᴅᴏs:* [ ${totalCommands} ]
 │ *🍫 ᴘʀᴇғɪᴊᴏ:* [ ${usedPrefix} ]
