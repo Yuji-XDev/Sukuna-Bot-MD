@@ -10,7 +10,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     await conn.sendMessage(m.chat, { react: { text: '⏱️', key: m.key }});
 
-    const api = `https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`;
+    const api = `https://api.stellarwa.xyz/dow/ytmp3?url=${url}&apikey=Dev.Shadow`;
     const res = await fetch(api);
     const json = await res.json();
 
