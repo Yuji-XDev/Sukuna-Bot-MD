@@ -53,6 +53,7 @@ global.wm = '◟𝐒𝐮𝐤𝐮𝐧𝐚 𝐁𝐨𝐭◞'
 global.author = 'mᥲძᥱ ᑲᥡ  🌈͢𝄟⏤͟͟͞͞⃝Sʜsᴅᴏᴡ`ᴄᴏʀᴇ'
 global.dev = '୧ㅤミ★ 》 Tʜᴇ sʜᴀᴅᴏᴡ`ᴄᴏʀᴇ 𝘰𝘧𝘤《★彡 🎋'
 global.bot = '𝑺𝒖𝒌𝒖𝒏𝒂 𝑩𝒐𝒕'
+global.club = '͞⋆⬪࣪ꥈ🥮★ 𝖯𑄜𝗐𝖾𝗋𝖾𝖽 𝖻𝗒 𝖲𝗁⍺𝖽ᦅ𝗐′core 𝖢𝗅𝗎𝖻𓆪'
 global.textbot = '𝚂𝚄𝙺𝚄𝙽𝙰 𝙱𝙾𝚃 𝕏 𝕊ℍ𝔸𝔻𝕆𝕎•ℂ𝕆ℝ𝔼'
 global.etiqueta = '@sʜᴀᴅᴏᴡ°ᴄᴏʀᴇ'
 
