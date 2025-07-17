@@ -1,48 +1,56 @@
-import axios from 'axios'
-import baileys from '@whiskeysockets/baileys'
+import axios from 'axios';
+import { prepareWAMessageMedia } from '@whiskeysockets/baileys';
 
 let handler = async (m, { conn, text }) => {
-  if (!text) return m.reply(`❀ Por favor, ingresa lo que deseas buscar por Pinterest.`)
+  if (!text) return m.reply(`💥 Por favor, ingresa lo que deseas buscar por Pinterest.`);
 
   try {
-    m.react('🕒')
-    let results = await pins(text)
+    await m.react('🕒');
 
-    if (!results.length) return conn.reply(m.chat, `✧ No se encontraron resultados para "${text}".`, m)
+    let results = await pins(text);
+    if (!results.length) return conn.reply(m.chat, `✧ No se encontraron resultados para "${text}".`, m);
 
-    const medias = results.slice(0, 10).map(img => ({ type: 'image', data: { url: img.hd } }))
+    let caption = `❀  Pinterest  -  Search  ❀\n\n✧ Búsqueda » "${text}"\n✐ Resultados » ${results.length}\n\n© Sukuna Bot MD`;
 
-    await conn.sendSylphy(m.chat, medias, {
-      caption: `❀  Pinterest  -  Search  ❀\n\n✧ Búsqueda » "${text}"\n✐ Resultados » ${medias.length}\n\n${dev}`,
-      quoted: m
-    })
+    // Solo mandamos las primeras 5 imágenes
+    for (let i = 0; i < Math.min(5, results.length); i++) {
+      let img = results[i].hd;
 
-    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
+      await conn.sendMessage(m.chat, {
+        image: { url: img },
+        caption,
+        mentions: [m.sender]
+      }, { quoted: m });
+    }
+
+    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+
   } catch (error) {
-    conn.reply(m.chat, `⚠︎ Error:\n\n${error.message}`, m)
+    console.error(error);
+    conn.reply(m.chat, `⚠︎ Error:\n\n${error.message}`, m);
   }
-}
+};
 
-handler.help = ['pinterest']
-handler.command = ['pinterest', 'pin']
-handler.tags = ['dl']
+handler.help = ['pinterest'];
+handler.command = ['pinterest', 'pin'];
+handler.tags = ['dl'];
 
-export default handler
+export default handler;
 
 const pins = async (query) => {
   try {
-    const { data } = await axios.get(`https://api.stellarwa.xyz/search/pinterest?query=${query}`)
+    const { data } = await axios.get(`https://api.stellarwa.xyz/search/pinterest?query=${encodeURIComponent(query)}`);
 
     if (data?.status && data?.data?.length) {
       return data.data.map(item => ({
         hd: item.hd,
         mini: item.mini
-      }))
+      }));
     }
 
-    return []
+    return [];
   } catch (error) {
-    console.error("Error al obtener imágenes de Pinterest:", error)
-    return []
+    console.error("Error al obtener imágenes de Pinterest:", error);
+    return [];
   }
-}
+};
