@@ -1,4 +1,4 @@
-// theBlack
+// Shadow'Core
 import { WAMessageStubType } from '@whiskeysockets/baileys'
 import fetch from 'node-fetch'
 
@@ -48,24 +48,25 @@ export async function before(m, { conn, participants, groupMetadata }) {
   let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => 'https://files.catbox.moe/04u4qi.jpg');
   let img = await (await fetch(`${pp}`)).buffer();
   let chat = global.db.data.chats[m.chat];
-  let txt = ` ⟆⃝༉⃟⸙ ᯽𝐁𝐈𝐄𝐍𝐕𝐄𝐍𝐈𝐃𝐎 ࣪˖ ִֶָ💖་`;
-  let txt1 = ` ⟆⃝༉⃟⸙ 𝐀 𝐃 𝐈 𝐎 𝐒 ͙🥺࿐`;
+  let txt = `🗙🖫︎⟆ 𝗕 𝗜 𝗘 𝗡 𝗩 𝗘 𝗡 𝗜 𝗗 𝗢⟆🗙🖫︎`;
+  let txt1 = `🗙🖫︎⟆ 𝗔 𝗗 𝗜 𝗢 𝗦 ⟆🗙🖫`;
   let groupSize = participants.length;
   if (m.messageStubType == 27) groupSize++;
   else if (m.messageStubType == 28 || m.messageStubType == 32) groupSize--;
 
   if (chat.welcome && m.messageStubType == 27) {
-    let bienvenida = `           ↷❮ 💥 𝐖ᥱᥣᥴ᥆mᥱ ☄️  ❯*
-🪷 𝐔sᥙᥲrі᥆ ⑄▷@${m.messageStubParameters[0].split`@`[0]}
-🎓 𝐌іᥱmᑲr᥆s : ${groupSize} Miembros
-🧭 𝐏ᥲís : ${pais}
-📜 𝐅ᥱᥴһᥲ : ${fecha}
-🕊️ 𝐇᥆rᥲ : ${hora}    
-👻 𝐆rᥙ⍴᥆ : ${groupMetadata.subject}
+    let bienvenida = `╭┈ ↷
+│ ✐ ❮ 🌴 \`𝐖ᥱᥣᥴ᥆mᥱ\` 🌾  ❯
+│ 🪷 *Usᴜᴀʀɪᴏ ▷* @${m.messageStubParameters[0].split`@`[0]}
+│ 🎓 *Mɪᴇᴍʙʀᴏs:* ${groupSize}
+│ 🧭 *Pᴀɪs:* ${pais}
+│ 📜 *Fᴇᴄʜᴀ:* ${fecha}
+│ 🕊️ *Hᴏʀᴀ:* ${hora}
+│ 👻 *Gʀᴜᴘᴏ:*
+│ ≡ ${groupMetadata.subject}
+╰̇╌̣╌̇╌̣━̇━̣╴╴╴╴╴╴╴╴╴╴̣━̇━̣╌̇╌̣╌̇
 
-*${global.welcom1}*
-
-> 🧠 \`\`\`Usa #𝗺𝗲𝗻𝘂 para descubrir comandos poderosos 🔥.\`\`\``;
+> 🛠 \`\`\`ᴜsᴀ #ᴍᴇɴᴜ ᴘᴀʀᴀ ᴠᴇʀ ʟᴏs ᴄᴏᴍᴀɴᴅᴏs ᴅɪsᴘᴏɴɪʙʟᴇs.\`\`\``;
 
     await conn.sendMini(m.chat, txt, dev, bienvenida, img, img, redes, fkontak);
   }
@@ -73,7 +74,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   if (chat.welcome && (m.messageStubType == 28 || m.messageStubType == 32)) {
     let bye = `           *↷❮ 🎭 𝐀𝐃𝐈Ó𝐒 🎭 ❯*
 🎯 𝐔sᥙᥲrі᥆ ⑄▷@${m.messageStubParameters[0].split`@`[0]}*
-🧮 𝐌іᥱmᑲr᥆s : ${groupSize} Miembros
+🧮 𝐌іᥱmᑲr᥆s : ${groupSize}
 🗺️ 𝐏ᥲís : ${pais}
 📆 𝐅ᥱᥴһᥲ : ${fecha}
 🕒 𝐇᥆rᥲ : ${hora}
@@ -81,7 +82,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
 *${global.welcom2}*
 
-> ✐ \`\`\`Usa #menu para ver los comandos disponibles.\`\`\``;
+> 🛠 \`\`\`ᴜsᴀ #ᴍᴇɴᴜ ᴘᴀʀᴀ ᴠᴇʀ ʟᴏs ᴄᴏᴍᴀɴᴅᴏs ᴅɪsᴘᴏɴɪʙʟᴇs.\`\`\``;
 
     await conn.sendMini(m.chat, txt1, dev, bye, img, img, redes, fkontak);
   }

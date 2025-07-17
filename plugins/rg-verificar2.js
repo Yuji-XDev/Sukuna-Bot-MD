@@ -14,15 +14,24 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   let name2 = conn.getName(m.sender)
   if (user.registered === true) return m.reply(`➤ ⌬ \`ＡＶＩＳＯ\` ⌬
 *🚫 Ya estás registrado...*
-¿Quieres reiniciar tu progreso?
+¿ ǫᴜɪᴇʀᴇs ᴠᴏʟᴠᴇʀ ᴀ ʀᴇɢɪsᴛʀᴀʀᴛᴇ ?
   
 ⛩️ Usa *#unreg* para borrar tu registro y volver a empezar.`)
-  if (!Reg.test(text)) return m.reply(`╭❌ 𝙀𝙍𝙍𝙊𝙍 𝘿𝙀 𝙁𝙊𝙍𝙈𝘼𝙏𝙊 ❌
-☄️ Debes escribirlo así:
+  if (!Reg.test(text)) return m.reply(`*『✦』El comando ingresado es incorrecto, uselo de la siguiente manera:*
+
 *${usedPrefix + command} nombre.edad*
 
-💥 Ejemplo válido:
+🎄 \`Ejemplo:\`
 *${usedPrefix + command} ${name2}.18*`)
+
+
+    let hora = new Date().toLocaleTimeString('es-PE', { timeZone: 'America/Lima' });
+    
+    let fechaObj = new Date();
+    let fecha = fechaObj.toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Lima' });
+    let dia = fechaObj.toLocaleDateString('es-PE', { weekday: 'long', timeZone: 'America/Lima' });
+
+
   let [_, name, splitter, age] = text.match(Reg)
   if (!name) return m.reply(`*『✦』El nombre no puede estar vacío.*`)
   if (!age) return m.reply(`*『✦』La edad no puede estar vacía.*`)
@@ -38,18 +47,17 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   global.db.data.users[m.sender].exp += 300
   global.db.data.users[m.sender].joincount += 20
   let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
-let regbot = `╭𖥔 ❍ 𝗥 𝗘 𝗚 𝗜 𝗦 𝗧 𝗥 𝗔 𝗗 𝗢 ❍ 𖥔╮\n`
-regbot += `┊🎉 ¡𝙍𝙚𝙜𝙞𝙨𝙩𝙧𝙤 𝙘𝙤𝙢𝙥𝙡𝙚𝙩𝙖𝙙𝙤! 🎉\n`
-regbot += `┊\n`
-regbot += `┊☆ 📛 \`Nombre:\` *${name}*\n`
-regbot += `┊☆ 🌪️ \`Edad:\` *${age} años*\n`
-regbot += `┊\n`
-regbot += `┊ 🎁 ＲＥＣＯＭＰＥＮＳＡＳ:\n`
-regbot += `┊☆ 💥 \`Coins:\` +40\n`
-regbot += `┊☆ ✨ \`Exp:\` +300\n`
-regbot += `┊☆ 👻 \`Tokens:\` +20\n`
-regbot += `╰──────────────────────╯\n`
-regbot += `> ⛩️ ${dev}`
+let regbot = `✅ VERIFICACIÓN EXITOSA ✅\n\n`
+regbot += `🌾 \`NOMBRE\` » \`\`\`${name}\`\`\`\n`
+regbot += `🌀 \`EDAD\` » \`\`\`${age} años\`\`\`\n`
+regbot += `🕸️ \`FECHA\` » \`\`\`${fecha}\`\`\`\n`
+regbot += `🐋 \`HORA\` » \`\`\`${hora}\`\`\`\n`
+regbot += `🌿 \`DIA\` » \`\`\`${dia}\`\`\`\n\n`
+regbot += `🍹 RECOMPENSAS 🧪\n`
+regbot += `🪙 \`COINS: +40\n`
+regbot += `🏮 \`EXP: +300\n`
+regbot += `🔰 \`TOKENS: +20\n`
+regbot += `> ${club}`
 await m.react('📩')
 
 await conn.sendMessage(m.chat, {
