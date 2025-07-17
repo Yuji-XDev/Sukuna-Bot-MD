@@ -77,7 +77,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     await conn.sendMessage(m.chat, { react: { text: '⏱️', key: m.key } });
 
-    const api = `https://api.stellarwa.xyz/dow/ytmp3?url=${encodeURIComponent(text)}&apikey=Dev.Shadow`;
+    const api = `https://api.stellarwa.xyz/dow/ytmp3?url=${url}&apikey=diamond`;
     const res = await fetch(api);
     const json = await res.json();
 
