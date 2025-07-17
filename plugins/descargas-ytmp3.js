@@ -2,10 +2,6 @@
 // no robes creaditos
 
 import fetch from 'node-fetch';
-import { writeFileSync } from 'fs';
-import { tmpdir } from 'os';
-import path from 'path';
-import { fileTypeFromBuffer } from 'file-type';
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) return m.reply(`*⛩️ Ingresa un link o nombre de YouTube 🌲*`);
@@ -15,52 +11,23 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const api = `https://api.nekorinn.my.id/downloader/ytplay-savetube?q=${encodeURIComponent(text)}`;
     const res = await fetch(api);
+
     if (!res.ok) throw new Error('No se pudo conectar con la API');
 
     const json = await res.json();
-    if (!json.status || !json.result?.downloadUrl) {
+
+    if (!json.status || !json.result || !json.result.downloadUrl) {
       return m.reply('❌ Ocurrió un error. Intenta con otro título o link.');
     }
 
-    const { title, cover, url: sourceUrl } = json.result.metadata;
-    const audioUrl = json.result.downloadUrl;
+    const { title, url: sourceUrl } = json.result.metadata;
+    const downloadUrl = json.result.downloadUrl;
 
-    // Descargar el audio en buffer
-    const audioRes = await fetch(audioUrl);
-    const buffer = Buffer.from(await audioRes.arrayBuffer());
-
-    // Obtener tipo de archivo
-    const type = await fileTypeFromBuffer(buffer);
-    const ext = type?.ext || 'mp3';
-
-    // Guardar temporalmente
-    const tempPath = path.join(tmpdir(), `ytmp3.${ext}`);
-    writeFileSync(tempPath, buffer);
-
-    // Descargar thumbnail
-    let thumb = null;
-    try {
-      thumb = await (await fetch(cover)).buffer();
-    } catch (e) {
-      console.warn('❌ Error al obtener miniatura:', e);
-    }
-
-    // Enviar como audio real (sin preview)
+    // Enviar audio como mensaje de voz normal
     await conn.sendMessage(m.chat, {
-      audio: { url: tempPath },
+      audio: { url: downloadUrl },
       mimetype: 'audio/mpeg',
-      ptt: false,
-      contextInfo: {
-        externalAdReply: {
-          title: title,
-          body: 'YOUTUBE • MP3',
-          mediaUrl: sourceUrl || text,
-          sourceUrl: sourceUrl || text,
-          thumbnail: thumb,
-          mediaType: 1,
-          renderLargerThumbnail: true
-        }
-      }
+      ptt: false, // false = no es nota de voz, true = nota de voz (ondas de audio)
     }, { quoted: m });
 
     await conn.sendMessage(m.chat, { react: { text: '✔️', key: m.key } });
