@@ -27,7 +27,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     await conn.sendMessage(m.chat, {
       audio: { url: downloadUrl },
       mimetype: 'audio/mpeg',
-      ptt: false, // false = no es nota de voz, true = nota de voz (ondas de audio)
+      ptt: true, // false = no es nota de voz, true = nota de voz (ondas de audio)
     }, { quoted: m });
 
     await conn.sendMessage(m.chat, { react: { text: '✔️', key: m.key } });
