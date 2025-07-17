@@ -1,4 +1,4 @@
-// codigo creado por Black.ofc
+/*// codigo creado por Black.ofc
 // no robes creaditos, XD
 
 import fetch from 'node-fetch';
@@ -45,4 +45,4 @@ handler.help = ['play'].map(v => v + ' <texto|url>');
 handler.tags = ['downloader'];
 handler.command = ['play'];
 
-export default handler;
+export default handler;*/
