@@ -60,7 +60,7 @@ en Sub-Bot ☄️
 \`4\` Escriba el codigo.
 
 > ⚠  Este codigo solo funciona en el Numero que lo solicito.
-> ✧ No es recomendable usar tu cuenta principal.`;
+> ✧ No es recomendable usar tu cuenta principal.`.trim();
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
