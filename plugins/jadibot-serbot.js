@@ -51,8 +51,7 @@ let rtx = `╔══════════════════════
 ╚══════════════════════════╝`;
 let rtx2 = ` ✨💥  ＳＵＫＵＮＡ -  B O T  🌾✨ 
 
-⟿ 💛 Usa este codigo para convertirte
-en Sub-Bot ☄️
+⟿ 💛 Usa este codigo para convertirte en Sub-Bot ☄️
 
 \`1\` Haga click en los ⋮ puntos en la esquina superior derecha.
 \`2\` Toca dispositivos vinculados.
@@ -163,28 +162,27 @@ if (qr && mcode) {
 let secret = await sock.requestPairingCode((m.sender.split`@`[0]))
 secret = secret.match(/.{1,4}/g)?.join("-")
 
-const msg = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-  interactiveMessage: {
-    body: { text: rtx2 }, 
-    footer: { text: 'Powered by Dev.Shadow 🇦🇱' },
-    header: {
-      hasMediaAttachment: false 
-    },
-    nativeFlowMessage: {
-      buttons: [
-        {
-          name: 'cta_copy',
-          buttonParamsJson: JSON.stringify({
-            display_text: '🖍️ Copiar Codigo',
-            copy_code: secret
-          })
-        }
-      ]
-    }
-  }
-}), { quoted: m })
+let imgPath = 'https://files.catbox.moe/vm6opf.jpg';
 
-txtCode = await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+let txtCode = await conn.sendMessage(m.chat, { 
+    text: rtx2,
+    contextInfo: {
+        mentionedJid: [m.sender, typeof userId !== 'undefined' ? userId : ''],
+        isForwarded: true,
+        forwardingScore: 999,
+        externalAdReply: {
+            title: "✧ ᴄᴏɴᴇxɪᴏɴ ᴅᴇ sᴜʙʙᴏᴛ ᴍᴏᴅᴇ: ᴄᴏᴅᴇꦿ✧",
+            body: "🌴 ＳＵＫＵＮＡ ＢＯＴ ＭＤ 💥",
+            thumbnailUrl: imgPath,
+            sourceUrl: 'https://github.com/the-27',
+            mediaType: 1,
+            showAdAttribution: true,
+            renderLargerThumbnail: true,
+        }
+    }
+}, { quoted: m });
+
+let codeBot = await conn.reply(m.chat, `${secret}`, fkontak, rcanal);
 
 //txtCode = await conn.sendMessage(m.chat, {text : rtx2}, { quoted: m })
 //codeBot = await m.reply(secret)
