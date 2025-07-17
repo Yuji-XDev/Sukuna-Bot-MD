@@ -1,55 +1,65 @@
-import fetch from 'node-fetch';
 import axios from 'axios';
 
-let handler = async (m, { conn, command, args, text, usedPrefix }) => {
-if (!text) return conn.reply(m.chat, `🤍 Ingrese el nombre de la cancion de *Soundcloud.*`, m, rcanal)
+const handler = async (m, { conn, text }) => {
+  if (!text) return m.reply('🌪️ *Por favor, ingresa el nombre de una canción o artista en SoundCloud.*');
 
-await m.react('🕒');
-try {
-let api = await fetch(`https://apis-starlights-team.koyeb.app/starlight/soundcloud-search?text=${encodeURIComponent(text)}`);
-let json = await api.json();
-let { url } = json[0];
+  try {
+    await m.react('⏳');
 
-let api2 = await fetch(`https://apis-starlights-team.koyeb.app/starlight/soundcloud?url=${url}`);
-let json2 = await api2.json();
+    
+    const searchRes = await axios.get('https://delirius-apiofc.vercel.app/search/soundcloud', {
+      params: { q: text, limit: 1 }
+    });
 
-let { link: dl_url, quality, image } = json2;
+    const song = searchRes.data.data[0];
+    if (!song) return m.reply('❌ No se encontraron resultados en SoundCloud.');
 
-let audio = await getBuffer(dl_url);
+    
+    const dlRes = await axios.get('https://delirius-apiofc.vercel.app/download/soundcloud', {
+      params: { url: song.link }
+    });
 
-let txt = `*\`S O U N C L O U D\`*\n\n`;
-    txt += `*Título* : ${json[0].title}\n`;
-    txt += `*Calidad* : ${quality}\n`;
-    txt += `*Url* : ${url}\n\n`
+    const audio = dlRes.data.data;
+    const image = audio.imageURL?.replace('t500x500', 't1080x1080') || '';
 
-await conn.sendFile(m.chat, image, 'thumbnail.jpg', txt, m, rcanal);
-await conn.sendMessage(m.chat, { audio: audio, fileName: `${json[0].title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+    const caption = `*✦ SOUND CLOUD ✦*\n\n` +
+      `🎧 *Título:* ${audio.title || 'Desconocido'}\n` +
+      `👤 *Artista:* ${audio.author?.username || 'Desconocido'}\n` +
+      `🆔 *ID:* ${audio.author?.id || 'Desconocido'}\n` +
+      `🌟 *Likes:* ${audio.author?.likes_count || '0'}\n` +
+      `🌱 *Publicado:* ${new Date(audio.author?.created_at).toLocaleDateString() || 'Desconocido'}\n` +
+      `🔗 *URL:* ${song.link || 'N/A'}`;
 
-await m.react('✅');
-} catch {
-await m.react('✖️');
-}}
+    await conn.sendFile(m.chat, image, 'cover.jpg', caption, m);
 
-handler.help = ['soundcloud *<texto>*']
-handler.tags = ['dl']
-handler.command = ['soundcloud', 'sound']
+    await conn.sendMessage(m.chat, {
+      audio: { url: audio.url },
+      fileName: `${audio.title}.mp3`,
+      mimetype: 'audio/mpeg',
+      ptt: false,
+      contextInfo: {
+        externalAdReply: {
+          title: audio.title,
+          body: `Descargado desde SoundCloud`,
+          thumbnailUrl: image,
+          mediaType: 1,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: m });
 
-export default handler
-
-const getBuffer = async (url, options) => {
-try {
-const res = await axios({
-method: 'get',
-url,
-headers: {
-'DNT': 1,
-'Upgrade-Insecure-Request': 1,
-},
-...options,
-responseType: 'arraybuffer',
-});
-return res.data;
-} catch (e) {
-console.log(`Error : ${e}`);
-}
+    await m.react('✅');
+  } catch (err) {
+    console.error('[SOUNDCLOUD ERROR]', err);
+    m.reply('❌ Ocurrió un error al procesar la solicitud.');
+    await m.react('❌');
+  }
 };
+
+handler.command = ['sound', 'soundcloud'];
+handler.help = ['soundcloud <nombre>'];
+handler.tags = ['descargas'];
+handler.register = true;
+handler.limit = 2;
+
+export default handler;
