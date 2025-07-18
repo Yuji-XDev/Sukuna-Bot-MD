@@ -1,47 +1,72 @@
-import fetch from 'node-fetch';
-import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys';
+// codigo creado por Dev.Shadow xD
+// https://gituhb.com/Yuji-XDev
 
-const handler = async (m, { conn, text }) => {
-  if (!text) return m.reply('🎧 Ingresa el enlace de YouTube.\n*Ejemplo:* .ytmp3 https://youtu.be/TdrL3QxjyVw');
+import fetch from 'node-fetch';
+
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+  if (!text) return m.reply(`🌾 *Ejemplo de uso:*\n\n✎ ✧\`${usedPrefix + command}\` https://youtube.com/watch?v=KHgllosZ3kA\n✎ ✧\`${usedPrefix + command}\` DJ malam pagi slowed`);
+
+  await m.react('🔍');
+
+  const isUrl = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(text);
+  let info = null;
 
   try {
-    await m.react('🎶');
 
-    const api = `https://delirius-apiofc.vercel.app/download/ytmp3?url=${encodeURIComponent(text)}`;
-    const res = await fetch(api);
-    const json = await res.json();
+    if (isUrl) {
+      let res1 = await fetch(`https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(text)}`);
+      let json1 = await res1.json();
 
-    if (!json.estado) return m.reply('❌ No se pudo obtener el audio. Asegúrate de que el enlace sea válido.');
+      if (!json1?.resultado?.descarga?.url) throw '❌ Falló API 1';
 
-    const data = json.datos;
-    const texto = `
-🌸 *${data.nombre}*
-🎙️ *Artistas:* ${data.artistas}
-⏱️ *Duración:* ${data.duración}
-📥 *Descarga disponible abajo*
-`.trim();
+      info = {
+        title: json1.resultado.metadata.title,
+        author: json1.resultado.metadata.author?.nombre,
+        duration: json1.resultado.metadata.duración?.marca_de_tiempo,
+        thumb: json1.resultado.metadata.image,
+        download: json1.resultado.descarga.url,
+        filename: json1.resultado.descarga.filename
+      };
+    }
 
-    const message = {
-      image: { url: data.imagen },
-      caption: texto,
-      footer: '✨ Sukuna - Bot MD',
-      buttons: [
-        {
-          buttonId: data.descargar,
-          buttonText: { displayText: '🎧 Descargar MP3' },
-          type: 1
-        }
-      ],
-      headerType: 4
-    };
+    if (!info) {
+      let res2 = await fetch(`https://api.vreden.my.id/api/ytplaymp3?query=${encodeURIComponent(text)}`);
+      let json2 = await res2.json();
 
-    await conn.sendMessage(m.chat, message, { quoted: m });
+      if (!json2?.result?.download?.url) throw '❌ Falló API 2';
+
+      info = {
+        title: json2.result.metadata.title,
+        author: json2.result.metadata.author?.name,
+        duration: json2.result.metadata.duration?.timestamp,
+        thumb: json2.result.metadata.thumbnail,
+        download: json2.result.download.url,
+        filename: json2.result.download.filename
+      };
+    }
+
+    await conn.sendMessage(m.chat, {
+      image: { url: info.thumb },
+      caption: `≡ 🌴 *\`Título:\`* ${info.title}\n≡ 🐛 *\`Autor:\`* ${info.author}\n≡ ⏱️ *\`Duración:\`* ${info.duration}\n\n🌳 *Enviando MP3...*`,
+    }, { quoted: m });
+
+    await conn.sendMessage(m.chat, {
+      audio: { url: info.download },
+      fileName: info.filename,
+      mimetype: 'audio/mpeg'
+    }, { quoted: m });
+
+    await m.react('✅');
 
   } catch (e) {
     console.error(e);
-    m.reply('⚠️ Error al procesar la solicitud.');
+    await m.reply('❌ *No se pudo obtener el MP3.* Intenta con otro título o link.');
+    await m.react('❌');
   }
 };
 
-handler.command = ['mp3yt', 'ytmusica'];
+handler.command = /^(yta)$/i;
+handler.help = ['yta'].map(c => c + ' <enlace o texto>');
+handler.tags = ['downloader'];
+
 export default handler;
