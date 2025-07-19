@@ -1,11 +1,13 @@
-// codigo creado por black.OFC
-// No robes creditos 
+// alv xD
+// https://github.com/Yuji-XDev
 
 import acrcloud from 'acrcloud';
 import { writeFile, unlink } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { randomUUID } from 'crypto';
+import yts from 'yt-search';
+import fetch from 'node-fetch';
 
 let acr = new acrcloud({
   host: 'identify-eu-west-1.acrcloud.com',
@@ -23,65 +25,91 @@ let handler = async (m, { conn, command, usedPrefix }) => {
   let q = m.quoted ? m.quoted : m;
   let mime = (q.msg || q).mimetype || q.mediaType || '';
 
-  if (/audio|video/.test(mime)) {
-    try {
-      await m.react('⏱️');
-      let buffer = await q.download();
-      if (!buffer) throw '❌ ocurrio un error xd.';
-      if (buffer.length > 1024 * 1024 * 5) throw '*⚠️ El archivo es muy grande. Usa uno menor a 5MB.*';
+  if (!/audio|video/.test(mime)) {
+    return conn.reply(m.chat, `🌪️ Responde a un *audio o video* con el comando *${usedPrefix + command}* para reconocer la música.`, m, rcanal);
+  }
 
-      let filename = `${randomUUID()}.mp3`;
-      let filepath = join(tmpdir(), filename);
-      await writeFile(filepath, buffer);
-      
-      let res = await acr.identify(buffer);
-      await unlink(filepath);
+  try {
+    await m.react('🔍');
+    let buffer = await q.download();
+    if (!buffer) throw '❌ No se pudo encontrar el archivo.';
+    if (buffer.length > 1024 * 1024 * 5) throw '*⚠️ El archivo es muy grande. Usa uno menor a 5MB.*';
 
-      if (res.status.msg !== 'Success') throw '❌ No se encontró coincidencia.';
+    const res = await acr.identify(buffer);
+    if (res.status.msg !== 'Success') throw '❌ No se detectó ninguna coincidencia.';
 
-      let meta = res.metadata?.music?.[0];
-      if (!meta) throw '❌ No se detectó ninguna canción.';
+    const meta = res.metadata?.music?.[0];
+    if (!meta) throw '❌ No se reconoció ninguna canción.';
 
-      let duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
-      let genres = meta.genres || [];
+    const duration = meta.duration_ms ? msToTime(meta.duration_ms) : 'Desconocido';
+    const genres = meta.genres?.map(v => v.name).join(', ') || 'Desconocido';
+    const title = meta.title || 'Desconocido';
+    const artist = meta.artists?.[0]?.name || 'Desconocido';
+    const album = meta.album?.name || 'Desconocido';
+    const image = meta.album?.images?.[0]?.url || 'xd';
+    const release = meta.release_date || 'Desconocido';
 
-      let txt = `╭─⬣「 *🎧 WHATMUSIC DETECTADO* 」⬣
-│ ✦ *Título:* ${meta.title || 'Desconocido'}
-│ ✦ *Artista:* ${meta.artists?.[0]?.name || 'Desconocido'}
-│ ✦ *Álbum:* ${meta.album?.name || 'Desconocido'}
-│ ✦ *Género:* ${genres.map(v => v.name).join(', ') || 'Desconocido'}
-│ ✦ *Lanzamiento:* ${meta.release_date || 'Desconocido'}
-│ ✦ *Duración:* ${duration}
+
+    const ytId = meta.external_metadata?.youtube?.vid;
+    let youtubeUrl = ytId ? `https://youtu.be/${ytId}` : '';
+    let spotifyUrl = meta.external_metadata?.spotify?.track?.external_urls?.spotify || '';
+
+    if (!youtubeUrl) {
+      const yt = await yts(`${title} ${artist}`);
+      const video = yt.videos[0];
+      if (video) youtubeUrl = video.url;
+    }
+
+    if (!spotifyUrl) {
+      const sp = await fetch(`https://delirius-apiofc.vercel.app/search/spotify?q=${encodeURIComponent(title + ' ' + artist)}`);
+      const json = await sp.json();
+      if (json?.datos?.length) {
+        spotifyUrl = json.datos[0]?.url || '';
+      }
+    }
+
+    const txt = `╭─⬣「 *🌾 WHATMUSIC TOOLS* 🇦🇱 」⬣
+│ 🌾 *\`Título:\`* ${title}
+│ 👻 *\`Artista:\`* ${artist}
+│ 🧁 *\`Álbum:\`* ${album}
+│ 👾 *\`Género:\`* ${genres}
+│ 💥 *\`Lanzamiento:\`* ${release}
+│ ⏱️ *\`Duración:\`* ${duration}
+│
+│ 🎄 *\`YouTube:\`* ${youtubeUrl || 'No encontrado'}
+│ 🔥 *\`Spotify:\`* ${spotifyUrl || 'No encontrado'}
 ╰⬣`;
 
-      await conn.sendMessage(m.chat, {
-        text: txt,
-        contextInfo: {
-          externalAdReply: {
-            title: meta.title || 'Canción detectada',
-            body: meta.artists?.[0]?.name || '',
-            thumbnailUrl: meta?.album?.images?.[0]?.url || '',
-            sourceUrl: meta?.external_metadata?.youtube?.url || '',
-            mediaType: 1,
-            renderLargerThumbnail: true,
-          }
+    await conn.sendMessage(m.chat, {
+      text: txt,
+      contextInfo: {
+        externalAdReply: {
+          title: title,
+          body: artist,
+          thumbnailUrl: image,
+          sourceUrl: youtubeUrl,
+          mediaType: 1,
+          renderLargerThumbnail: true
+        }
+      },
+      buttons: [
+        {
+          buttonId: `${usedPrefix}play ${youtubeUrl}`,
+          buttonText: { displayText: '📥 ᴅᴇsᴄᴀʀɢᴀʀ' },
+          type: 1
         },
-        buttons: [
-          {
-            buttonId: `${usedPrefix}play ${meta.title}`,
-            buttonText: { displayText: '📥 Descargar' },
-            type: 1
-          }
-        ],
-        footer: '🎶 Usa el botón para descargar',
-      }, { quoted: m });
+        {
+          buttonId: `${usedPrefix}ytsearch ${title}`,
+          buttonText: { displayText: '🔎 ʙᴜsᴄᴀʀ' },
+          type: 1
+        }
+      ],
+      footer: club,
+    }, { quoted: m });
 
-    } catch (e) {
-      console.error(e);
-      conn.reply(m.chat, `❌ Error: ${e}`, m);
-    }
-  } else {
-    conn.reply(m.chat, `🌪️ Etiqueta un audio o video con el comando *${usedPrefix + command}* para reconocer la música.`, m, rcanal);
+  } catch (e) {
+    console.error('[WHATMUSIC ❌]:', e);
+    conn.reply(m.chat, `❌ Error: ${e}`, m);
   }
 };
 
