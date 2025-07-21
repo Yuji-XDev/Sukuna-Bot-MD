@@ -9,20 +9,13 @@ const handler = async (m, { conn, text, command }) => {
 
   try {
     const res = await fetch(`https://api.nekorinn.my.id/downloader/spotifyplay?q=${encodeURIComponent(text)}`);
-    if (!res.ok) throw new Error('API caída o sin respuesta.');
+    if (!res.ok) throw new Error();
 
     const json = await res.json();
-    if (!json.result?.downloadUrl) throw new Error('No se pudo obtener el audio.');
+    if (!json.result?.downloadUrl) throw new Error();
 
     const info = json.result;
-    const caption = `*♬ SPOTIFY DOWNLOADER ♬*\n\n` +
-      `🎼 *Título:* ${info.title || 'Desconocido'}\n` +
-      `🎤 *Artista:* ${info.artists?.join(', ') || 'Desconocido'}\n` +
-      `📀 *Álbum:* ${info.album?.name || 'Desconocido'}\n` +
-      `🕒 *Duración:* ${info.duration || 'N/A'}\n` +
-      `🔗 *Link:* ${info.url || text}`;
 
- 
     let thumb = null;
     try {
       const img = await conn.getFile(info.cover);
@@ -31,14 +24,6 @@ const handler = async (m, { conn, text, command }) => {
       console.warn('No se pudo obtener la portada.');
     }
 
- 
-    if (thumb) {
-      await conn.sendFile(m.chat, thumb, 'cover.jpg', caption, m);
-    } else {
-      await m.reply(caption);
-    }
-
- 
     await conn.sendMessage(m.chat, {
       audio: { url: info.downloadUrl },
       fileName: `${info.title}.mp3`,
@@ -47,7 +32,7 @@ const handler = async (m, { conn, text, command }) => {
       contextInfo: {
         externalAdReply: {
           title: info.title,
-          body: `Spotify Music`,
+          body: `🌴 ᴅᴇsᴄᴀʀɢᴀ ᴄᴏᴍᴘʟᴇᴛᴀ 🌳`,
           thumbnail: thumb,
           mediaType: 1,
           renderLargerThumbnail: true
